@@ -57,7 +57,7 @@ public final class L3_C5_Graph {
               
              
              // avec ce tableau, on crée un arc car on veut 1 arc par ligne
-             L3_C5_Arc arc = new L3_C5_Arc(Integer.parseInt(arcValuesString[1]),Integer.parseInt(arcValuesString[0]),Integer.parseInt(arcValuesString[2]));
+             L3_C5_Arc arc = new L3_C5_Arc(Integer.parseInt(arcValuesString[1]),Integer.parseInt(arcValuesString[0]),Integer.parseInt(arcValuesString[2])); 
             System.out.println("arc crée : "+arc);
              allArcs.add(arc);
               }
@@ -68,7 +68,6 @@ public final class L3_C5_Graph {
          {
              System.out.println("Le fichier " + fileName + " existe mais est vide");
          }
-       
 }         catch (IOException ex) {
             Logger.getLogger(L3_C5_Graph.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -82,7 +81,6 @@ public final class L3_C5_Graph {
               // A l'aide de tous nos arcs, on crée les sommets
               for (int i = 0; i< vertexCount;i++)
               {
-                  
                   L3_C5_Vertex v = new L3_C5_Vertex(i);
                   for(L3_C5_Arc a : allArcs)
                   {
@@ -150,12 +148,20 @@ public final class L3_C5_Graph {
     }
     
    private  boolean[][] adjMatrix;
+   
+   
+   void printValMatrix()
+   {
+       System.out.println("A faire");
+   }
     
     //  matrice d’adjacence booléenne, avec, préférablement, les 0 remplacés par du vide ou des traits
    // A rendre compatible avec les boucles
     void printAdjMatrix()
     {
         System.out.println("Affichage de la matrice d'adjacence");
+        System.out.println("Nombre de sommets : "+vertexCount);
+        System.out.println("Nombre d'arcs     : "+allArcs.size());
         // si la matrice d'adjacence n'a pas encore été créee on le fait maintenant
         if(adjMatrix==null || adjMatrix.length==0)
         {
