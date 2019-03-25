@@ -1,8 +1,10 @@
 default:
-	javac src/thgraphes_pathfinding/*.java
+	javac src/L3_C5_thgraphes_pathfinding/*.java
 
 clean:
-	rm -rf src/thgraphes_pathfinding/*.class
+	rm -rf src/L3_C5_thgraphes_pathfinding/*.class
+	rm -rf src/*.txt
 
 run: default
-	cd src && java thgraphes_pathfinding.ThGraphes_pathfinding
+	cp *.txt src/
+	cd src && java L3_C5_thgraphes_pathfinding.L3_C5_ThGraphes_pathfinding
