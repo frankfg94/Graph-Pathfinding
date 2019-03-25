@@ -5,19 +5,21 @@
  */
 package thgraphes_pathfinding;
 
+
+
 /**
  *
  * @author franc
  */
-public class Arc 
+public class L3_C5_Arc 
 {
-    public Vertex initialExtremity; // pas utilisé pour l'instant à par dans le constructeur Arc(int value, Vertex initExtremity, Vertex termExtremity)
-    public Vertex terminalExtremity; // pas utilisé pour l'instant à par dans le constructeur Arc(int value, Vertex initExtremity, Vertex termExtremity)
+    public L3_C5_Vertex initialExtremity; // pas utilisé pour l'instant à par dans le constructeur L3_C5_Arc(int value, L3_C5_Vertex initExtremity, L3_C5_Vertex termExtremity)
+    public L3_C5_Vertex terminalExtremity; // pas utilisé pour l'instant à par dans le constructeur L3_C5_Arc(int value, L3_C5_Vertex initExtremity, L3_C5_Vertex termExtremity)
     public int initExtremityValue = -1;
     public int termExtremityValue = -1;
     public int value = -1;
     
-    public Arc(int value, Vertex initExtremity, Vertex termExtremity)
+    public L3_C5_Arc(int value, L3_C5_Vertex initExtremity, L3_C5_Vertex termExtremity)
     {
         this.value=value;
         this.initialExtremity = initExtremity;
@@ -26,7 +28,7 @@ public class Arc
         this.termExtremityValue = termExtremity.value;
     }
     
-    public Arc(int value, int initExtremityValue, int termExtremityValue)
+    public L3_C5_Arc(int value, int initExtremityValue, int termExtremityValue)
     {
         this.value = value;
         this.initExtremityValue = initExtremityValue;

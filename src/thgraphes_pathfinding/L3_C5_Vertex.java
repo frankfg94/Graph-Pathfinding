@@ -11,10 +11,10 @@ import java.util.ArrayList;
  *
  * @author franc
  */
-public class Vertex // Sommet
+public class L3_C5_Vertex // Sommet
 {
     // désigne les successeurs et prédécesseurs
-    public ArrayList<Arc> arcs = new ArrayList<>();    
+    public ArrayList<L3_C5_Arc> arcs = new ArrayList<>();    
     int value;     // valeur du sommet
     public ArrayList<Integer> predValues = new ArrayList<>();
     public ArrayList<Integer> succValues = new ArrayList<>();
@@ -24,7 +24,7 @@ public class Vertex // Sommet
     public String toString()
     {
         String s = "Sommet : (" + value + ")" + System.lineSeparator();
-        for(Arc a: arcs)
+        for(L3_C5_Arc a: arcs)
         {
             s+= a.toString() + System.lineSeparator();
         }
@@ -32,30 +32,30 @@ public class Vertex // Sommet
     }
     
     // Nécéssaire pour créer nos sommets à l'aide d'arcs
-    public Vertex(int value) 
+    public L3_C5_Vertex(int value) 
     {
        this.value = value;
     }
     
-    public Vertex(int value, ArrayList<Arc> arcs)
+    public L3_C5_Vertex(int value, ArrayList<L3_C5_Arc> arcs)
     {
         this.arcs = arcs;
         this.value = value;
     }
     
-    public Arc getArcGoingTo(int value)
+    public L3_C5_Arc getArcGoingTo(int value)
     {
-        for(Arc a : arcs)
+        for(L3_C5_Arc a : arcs)
             if(a.termExtremityValue == value)
                 return a;
         return null;
     }
     
     // Arcs sortants du sommet
-    public ArrayList<Arc> getOutgoingArcs()
+    public ArrayList<L3_C5_Arc> getOutgoingArcs()
     {
-        ArrayList<Arc> arcList = new ArrayList();
-        for(Arc a : arcs)
+        ArrayList<L3_C5_Arc> arcList = new ArrayList();
+        for(L3_C5_Arc a : arcs)
         {
             if(a.initExtremityValue == value)
                 arcList.add(a);
@@ -64,10 +64,10 @@ public class Vertex // Sommet
     }
     
     // Arcs entrants du sommet
-        public ArrayList<Arc> getEnteringArcs()
+        public ArrayList<L3_C5_Arc> getEnteringArcs()
     {
-        ArrayList<Arc> arcsList = new ArrayList();
-        for(Arc a : arcs)
+        ArrayList<L3_C5_Arc> arcsList = new ArrayList();
+        for(L3_C5_Arc a : arcs)
         {
             if(a.termExtremityValue == value)
                 arcs.add(a);

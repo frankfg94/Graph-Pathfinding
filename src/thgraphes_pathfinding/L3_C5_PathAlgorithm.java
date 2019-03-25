@@ -9,7 +9,7 @@ package thgraphes_pathfinding;
  *
  * @author franc
  */
-public enum PathAlgorithm {
+public enum L3_C5_PathAlgorithm {
     Dijkstra,
     Bellman
 }

@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author franc
  */
-public class ThGraphes_pathfinding {
+public class L3_C5_ThGraphes_pathfinding {
 
     
     
@@ -27,10 +27,10 @@ public class ThGraphes_pathfinding {
     
     private static void TestAllGraphs()
     {
-        Graph g = new Graph("C:\\Users\\franc\\OneDrive\\Documents\\NetBeansProjects\\ThGraphes_pathfinding\\src\\thgraphes_pathfinding\\sampleGraph.txt");
+        L3_C5_Graph g = new L3_C5_Graph("L3_C5_sampleGraph.txt");
         g.printStructure();
         g.printAdjMatrix();
-        g.CalculatePathfinding(PathAlgorithm.Dijkstra, true);
+        g.CalculatePathfinding(L3_C5_PathAlgorithm.Dijkstra, true);
     }
    
 }
