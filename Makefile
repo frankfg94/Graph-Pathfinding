@@ -4,5 +4,5 @@ default:
 clean:
 	rm -rf src/thgraphes_pathfinding/*.class
 
-run:
+run: default
 	cd src && java thgraphes_pathfinding.ThGraphes_pathfinding
