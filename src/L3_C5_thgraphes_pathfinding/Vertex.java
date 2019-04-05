@@ -11,11 +11,11 @@ import java.util.ArrayList;
  *
  * @author franc
  */
-public class L3_C5_Vertex // Sommet
+public class Vertex // Sommet
 {
     // désigne les successeurs et prédécesseurs
     public ArrayList<L3_C5_Arc> arcs = new ArrayList<>();    
-    int value;     // valeur du sommet
+    int ID;     // valeur du sommet
     public ArrayList<Integer> predValues = new ArrayList<>();
     public ArrayList<Integer> succValues = new ArrayList<>();
 
@@ -23,7 +23,7 @@ public class L3_C5_Vertex // Sommet
     @Override
     public String toString()
     {
-        String s = "Sommet : (" + value + ")" + System.lineSeparator();
+        String s = "Sommet : (" + ID + ")" + System.lineSeparator();
         for(L3_C5_Arc a: arcs)
         {
             s+= a.toString() + System.lineSeparator();
@@ -32,15 +32,15 @@ public class L3_C5_Vertex // Sommet
     }
     
     // Nécéssaire pour créer nos sommets à l'aide d'arcs
-    public L3_C5_Vertex(int value) 
+    public Vertex(int value) 
     {
-       this.value = value;
+       this.ID = value;
     }
     
-    public L3_C5_Vertex(int value, ArrayList<L3_C5_Arc> arcs)
+    public Vertex(int value, ArrayList<L3_C5_Arc> arcs)
     {
         this.arcs = arcs;
-        this.value = value;
+        this.ID = value;
     }
     
     public L3_C5_Arc getArcGoingTo(int value)
@@ -57,24 +57,45 @@ public class L3_C5_Vertex // Sommet
         ArrayList<L3_C5_Arc> arcList = new ArrayList();
         for(L3_C5_Arc a : arcs)
         {
-            if(a.initExtremityValue == value)
+            if(a.initExtremityValue == ID)
                 arcList.add(a);
         }
         return arcList;
+    }
+    
+    // Permet d'obtenir directement une liste de sommets à partir de la liste des numéros de ces sommets
+    public static ArrayList<Vertex> getVerticesFromValues(ArrayList<Integer> values, L3_C5_Graph graph)
+    {
+        ArrayList<Vertex> vertices= new ArrayList<>();
+        for( Integer i : values )
+        {
+            vertices.add(Vertex.FindVertexWithValue(i, graph));
+        }
+        return vertices;
     }
     
     // Arcs entrants du sommet
         public ArrayList<L3_C5_Arc> getEnteringArcs()
     {
         ArrayList<L3_C5_Arc> arcsList = new ArrayList();
-        for(L3_C5_Arc a : arcs)
+        for(L3_C5_Arc a : arcs.toArray(new L3_C5_Arc[arcs.size()]))
         {
-            if(a.termExtremityValue == value)
+            if(a.termExtremityValue == ID)
                 arcs.add(a);
         }
         return arcs;
     }
+           
+        public static Vertex FindVertexWithValue(int vertexValue, L3_C5_Graph graph)
+    {
+        for(Vertex v : graph.allVertex )
+        {
+            if(v.ID == vertexValue)
+                return v;
+        }
+        return null;
+    }
     
- 
+
     
 }

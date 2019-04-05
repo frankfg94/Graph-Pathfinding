@@ -5,6 +5,8 @@
  */
 package L3_C5_thgraphes_pathfinding;
 
+import java.util.ArrayList;
+
 
 
 /**
@@ -13,19 +15,19 @@ package L3_C5_thgraphes_pathfinding;
  */
 public class L3_C5_Arc 
 {
-    public L3_C5_Vertex initialExtremity; // pas utilisé pour l'instant à par dans le constructeur L3_C5_Arc(int value, L3_C5_Vertex initExtremity, L3_C5_Vertex termExtremity)
-    public L3_C5_Vertex terminalExtremity; // pas utilisé pour l'instant à par dans le constructeur L3_C5_Arc(int value, L3_C5_Vertex initExtremity, L3_C5_Vertex termExtremity)
+    public Vertex initialExtremity; // pas utilisé pour l'instant à par dans le constructeur L3_C5_Arc(int ID, Vertex initExtremity, Vertex termExtremity)
+    public Vertex terminalExtremity; // pas utilisé pour l'instant à par dans le constructeur L3_C5_Arc(int ID, Vertex initExtremity, Vertex termExtremity)
     public int initExtremityValue = -1;
     public int termExtremityValue = -1;
-    public int value = -1;
+    public int value = -1; // Nombre qui identifie notre sommet
     
-    public L3_C5_Arc(int value, L3_C5_Vertex initExtremity, L3_C5_Vertex termExtremity)
+    public L3_C5_Arc(int value, Vertex initExtremity, Vertex termExtremity)
     {
         this.value=value;
         this.initialExtremity = initExtremity;
         this.terminalExtremity = termExtremity;
-        this.initExtremityValue = initExtremity.value;
-        this.termExtremityValue = termExtremity.value;
+        this.initExtremityValue = initExtremity.ID;
+        this.termExtremityValue = termExtremity.ID;
     }
     
     public L3_C5_Arc(int value, int initExtremityValue, int termExtremityValue)
@@ -39,5 +41,20 @@ public class L3_C5_Arc
     public String toString()
     {
         return String.format("(%d)--(%d)-->(%d)",initExtremityValue,value,termExtremityValue);
+    }
+    
+//    public static ArrayList<L3_C5_Arc> findWithValue(ArrayList<L3_C5_Arc> arcs)
+//    {
+//       
+//    }
+
+    public Vertex getInitialExtremity(L3_C5_Graph graph) 
+    {
+      return Vertex.FindVertexWithValue(initExtremityValue, graph);
+    }
+    
+    public Vertex getTerminalExtremity(L3_C5_Graph graph) 
+    {
+      return Vertex.FindVertexWithValue(termExtremityValue, graph);
     }
 }

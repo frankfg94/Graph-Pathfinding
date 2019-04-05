@@ -30,7 +30,8 @@ public class L3_C5_ThGraphes_pathfinding {
         L3_C5_Graph g = new L3_C5_Graph("L3_C5_sampleGraph.txt");
         g.printStructure();
         g.printAdjMatrix();
-        g.CalculatePathfinding(L3_C5_PathAlgorithm.Dijkstra, true);
+        g.printIncidenceMatrix();
+        //g.CalculateAndShowPathfinding(L3_C5_PathAlgorithm.Dijkstra, true);
     }
    
 }
