@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author franc
  */
-public class L3_C5_ThGraphes_pathfinding {
+public class L3_C5_main {
 
     
     
@@ -25,13 +25,16 @@ public class L3_C5_ThGraphes_pathfinding {
     }
     
     
+    
     private static void TestAllGraphs()
     {
         L3_C5_Graph g = new L3_C5_Graph("L3_C5_sampleGraph.txt");
         g.printStructure();
         g.printAdjMatrix();
         g.printIncidenceMatrix();
+        dijsktra_new dij = new dijsktra_new(g);
         //g.CalculateAndShowPathfinding(L3_C5_PathAlgorithm.Dijkstra, true);
     }
+
    
 }

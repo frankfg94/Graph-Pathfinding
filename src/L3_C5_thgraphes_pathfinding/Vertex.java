@@ -6,6 +6,7 @@
 package L3_C5_thgraphes_pathfinding;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
@@ -18,7 +19,8 @@ public class Vertex // Sommet
     int ID;     // valeur du sommet
     public ArrayList<Integer> predValues = new ArrayList<>();
     public ArrayList<Integer> succValues = new ArrayList<>();
-
+    public int graphPred = 0;
+    
     
     @Override
     public String toString()
@@ -43,6 +45,20 @@ public class Vertex // Sommet
         this.ID = value;
     }
     
+    public ArrayList<Vertex> getAllNeighbours(L3_C5_Graph graph)
+    {
+        HashSet neighbours = new HashSet();
+        for(L3_C5_Arc arc : arcs)
+        {
+            System.out.println("arc :"+ arc.value);
+           neighbours.add(Vertex.FindVertexWithID(arc.termExtremityValue, graph));
+        }
+        neighbours.remove(this);
+        
+        return new ArrayList<>(neighbours);
+    }
+
+    
     public L3_C5_Arc getArcGoingTo(int value)
     {
         for(L3_C5_Arc a : arcs)
@@ -50,6 +66,17 @@ public class Vertex // Sommet
                 return a;
         return null;
     }
+    
+      
+    public L3_C5_Arc getArcComingFrom(int value)
+    {
+        for(L3_C5_Arc a : arcs)
+            if(a.initExtremityValue == value)
+                return a;
+        return null;
+    }
+    
+
     
     // Arcs sortants du sommet
     public ArrayList<L3_C5_Arc> getOutgoingArcs()
@@ -69,7 +96,7 @@ public class Vertex // Sommet
         ArrayList<Vertex> vertices= new ArrayList<>();
         for( Integer i : values )
         {
-            vertices.add(Vertex.FindVertexWithValue(i, graph));
+            vertices.add(Vertex.FindVertexWithID(i, graph));
         }
         return vertices;
     }
@@ -86,13 +113,14 @@ public class Vertex // Sommet
         return arcs;
     }
            
-        public static Vertex FindVertexWithValue(int vertexValue, L3_C5_Graph graph)
+        public static Vertex FindVertexWithID(int vertexID, L3_C5_Graph graph)
     {
         for(Vertex v : graph.allVertex )
         {
-            if(v.ID == vertexValue)
+            if(v.ID == vertexID)
                 return v;
         }
+        System.out.println("Nothing found");
         return null;
     }
     

@@ -50,11 +50,11 @@ public class L3_C5_Arc
 
     public Vertex getInitialExtremity(L3_C5_Graph graph) 
     {
-      return Vertex.FindVertexWithValue(initExtremityValue, graph);
+      return Vertex.FindVertexWithID(initExtremityValue, graph);
     }
     
     public Vertex getTerminalExtremity(L3_C5_Graph graph) 
     {
-      return Vertex.FindVertexWithValue(termExtremityValue, graph);
+      return Vertex.FindVertexWithID(termExtremityValue, graph);
     }
 }

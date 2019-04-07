@@ -28,7 +28,7 @@ public final class L3_C5_Graph {
     
     public static ArrayList<L3_C5_Graph> graphesMem  = new ArrayList<L3_C5_Graph>();
     public static L3_C5_Graph selectedGraph = null;
-    private ArrayList<L3_C5_Arc> allArcs = new ArrayList<L3_C5_Arc>();
+    public ArrayList<L3_C5_Arc> allArcs = new ArrayList<L3_C5_Arc>();
     public ArrayList<Vertex> allVertex = new ArrayList<Vertex>();
     private String fileName; // Le fichier qui permet de charger le graphe   
     private  boolean[][] adjMatrix;
@@ -88,6 +88,7 @@ public final class L3_C5_Graph {
              System.out.println("Le fichier " + fileName + " existe mais est vide");
          }
 }         catch (IOException ex) {
+             System.out.println("Erreur de chargement du fichier texte");
             Logger.getLogger(L3_C5_Graph.class.getName()).log(Level.SEVERE, null, ex);
         }
          
@@ -173,7 +174,7 @@ public final class L3_C5_Graph {
         {
             for(int j =0; j < vertexCount ; j++)
             {
-                for(L3_C5_Arc a : Vertex.FindVertexWithValue(i,this).arcs )
+                for(L3_C5_Arc a : Vertex.FindVertexWithID(i,this).arcs )
                 {
                     if(i == a.initExtremityValue && j==a.termExtremityValue)
                     {
@@ -246,7 +247,7 @@ public final class L3_C5_Graph {
             {
                 for(int vertIndex = 0; vertIndex < vertexCount; vertIndex++)
                 {
-                      curVertexId = Vertex.FindVertexWithValue(vertIndex, this).ID;
+                      curVertexId = Vertex.FindVertexWithID(vertIndex, this).ID;
                       if(allArcs.get(arcIndex).initExtremityValue == curVertexId )
                       incidenceMatrix[vertIndex][arcIndex] = 1;
                       else if  (allArcs.get(arcIndex).termExtremityValue == curVertexId)   
@@ -311,6 +312,8 @@ public final class L3_C5_Graph {
         {
           arcs.addAll(vertices.get(i).arcs);
         }
+        for(L3_C5_Arc arc : arcs)
+            weight+=arc.value;
         System.out.println("weight : "  + arcs);
         return weight;
     }
@@ -322,7 +325,7 @@ public final class L3_C5_Graph {
                     Vertex v;
         for (int i = 0; i < verticesValues.size(); i++) 
         {
-            v = Vertex.FindVertexWithValue(verticesValues.get(i), this);
+            v = Vertex.FindVertexWithID(verticesValues.get(i), this);
             arcs.addAll(v.arcs);
             weight+=v.arcs.get(i).value;
         }
@@ -336,14 +339,14 @@ public final class L3_C5_Graph {
     {
         ArrayList<Integer> vertexPathsValues = new ArrayList<>();
         ArrayList<Integer> arcPathValues = new ArrayList<>();
-        Vertex lastPathVertex = Vertex.FindVertexWithValue(0, this); // Indique le dernier sommet par lequel est passé notre pathfinding
+        Vertex lastPathVertex = Vertex.FindVertexWithID(0, this); // Indique le dernier sommet par lequel est passé notre pathfinding
         vertexPathsValues.add(lastPathVertex.ID);
         ArrayList<String> codes = new ArrayList<>();
         System.out.println("Algorithme utilisé pour la recherche de chemin : "+ algotype.name());
         switch(algotype)
         {
             case Dijkstra: 
-                for(L3_C5_Arc a : Vertex.FindVertexWithValue(0,this).getOutgoingArcs() )
+                for(L3_C5_Arc a : Vertex.FindVertexWithID(0,this).getOutgoingArcs() )
                 {
                     System.out.println(a);
                 }
@@ -379,13 +382,13 @@ public final class L3_C5_Graph {
                             if(tabLineIndex == 0)
                             {
                                 String cellDisplay = "";
-                                for(L3_C5_Arc arc : Vertex.FindVertexWithValue(tabLineIndex,this).getOutgoingArcs())
+                                for(L3_C5_Arc arc : Vertex.FindVertexWithID(tabLineIndex,this).getOutgoingArcs())
                                 {
                                     if(arc.termExtremityValue == curVertexIndex)
                                     {
                                         cellDisplay = arc.value+ "("+ tabLineIndex +")"; // Contenu d'une case
                                     }
-                                        lastPathVertex = Vertex.FindVertexWithValue(tabLineIndex, this);
+                                        lastPathVertex = Vertex.FindVertexWithID(tabLineIndex, this);
                                 }
                                 pathArray[tabLineIndex][curVertexIndex] = cellDisplay;
 
