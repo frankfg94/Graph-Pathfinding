@@ -30,12 +30,14 @@ public class dijsktra_new
         dijkstraMatrix = new int[vertexCount][vertexCount];
         distances = new int[vertexCount];
         for (int i = 0; i < distances.length; i++) {
-            distances[i] = Integer.MAX_VALUE;
+            distances[i] = Integer.MAX_VALUE; // On met toutes les distances à +infini
+            Vertex.FindVertexWithID(i, g).graphPred = new int[distances.length];
         }
         distances[0] = 0;
         this.g = g;
         this.chemin = new ArrayList<>();
         listeSommets= g.allVertex; 
+        
         
         // Initialisation   
         Vertex premierSommet = Vertex.FindVertexWithID(0, g);
@@ -48,6 +50,7 @@ public class dijsktra_new
             AjouterAuCheminLeSommetAvecLaDistanceDepuisLeDebutLaPlusPetite();
             etape_ID++;
         }
+        ActualiserMatriceDeDijkstra(etape_ID-1);
         System.out.println("Terminé !");
         VoirLeChemin();
         AfficherTableauDijsktra();
@@ -105,7 +108,7 @@ public class dijsktra_new
             {
                 // comment recalcule t'on une distance ? on prend la distance du premier sommet jusqu'à celui ci
                 distances[sommet.ID] = distances[dernierSommetChemin.ID] + sommet.getArcComingFrom(dernierSommetChemin.ID).value;
-                
+                Vertex.FindVertexWithID(sommet.ID, g).graphPred[etape_ID] = dernierSommetChemin.ID;
                 // Une fois qu'on a recalculé et assigné les distances, on peut passer à l'étape suivante
                 // Il faut ajouter le nouveau sommet au chemin en comparant toutes nos distances
                    ActualiserMatriceDeDijkstra(etape_ID);
@@ -138,6 +141,16 @@ public class dijsktra_new
 
     private void AfficherTableauDijsktra()
     {
+        // Correction des predecesseurs dans le graphe
+        for(int i =0 ; i < distances.length ;i++)
+        {
+            Vertex v = Vertex.FindVertexWithID(i, g);
+            for (int j = 1; j < distances.length; j++) {
+                if(v.graphPred[j] == 0 && v.graphPred[j-1]!=0)
+                    v.graphPred[j] = v.graphPred[j-1];
+            }
+        }
+        
         // Affichage de la premiere ligne du tableau
         for (int i = 0; i < listeSommets.size(); i++) {
             if(i==0)
@@ -153,11 +166,11 @@ public class dijsktra_new
         
         // Affichage du tableau
         System.out.println();
-        for (int i = 0; i < listeSommets.size(); i++) {
+        for (int i = 0; i < listeSommets.size(); i++) { // Lignes qui rpz les etapes
             System.out.print(ObtenirCode(i) + "\t|");
-            for (int j = 0; j <  listeSommets.size(); j++) {
+            for (int j = 0; j <  listeSommets.size(); j++) { // Colonnes qui representent les sommets
                 if(dijkstraMatrix[i][j] !=Integer.MAX_VALUE)
-                    System.out.print( dijkstraMatrix[i][j] );
+                    System.out.print( dijkstraMatrix[i][j] +"("+ Vertex.FindVertexWithID(j, g).graphPred[i] + ")" );
                 else 
                     System.out.print("∞");
                 System.out.print("\t");

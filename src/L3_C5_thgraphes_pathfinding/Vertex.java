@@ -19,7 +19,7 @@ public class Vertex // Sommet
     int ID;     // valeur du sommet
     public ArrayList<Integer> predValues = new ArrayList<>();
     public ArrayList<Integer> succValues = new ArrayList<>();
-    public int graphPred = 0;
+    public int[] graphPred = null;
     
     
     @Override
