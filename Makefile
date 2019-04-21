@@ -7,4 +7,5 @@ clean:
 
 run: default
 	cp *.txt src/
-	cd src && java L3_C5_thgraphes_pathfinding.L3_C5_ThGraphes_pathfinding
+	cd src && java L3_C5_thgraphes_pathfinding.L3_C5_main
+
