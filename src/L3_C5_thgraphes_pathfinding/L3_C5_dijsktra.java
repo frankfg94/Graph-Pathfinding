@@ -19,8 +19,8 @@ public class L3_C5_dijsktra
 {
     
     int[][] dijkstraMatrix;
-    ArrayList<Vertex> chemin;
-    ArrayList<Vertex> listeSommets;
+    ArrayList<L3_C5_Vertex> chemin;
+    ArrayList<L3_C5_Vertex> listeSommets;
     int etape_ID = 0;
     L3_C5_Graph g;
     int[] distances;
@@ -31,7 +31,7 @@ public class L3_C5_dijsktra
         distances = new int[vertexCount];
         for (int i = 0; i < distances.length; i++) {
             distances[i] = Integer.MAX_VALUE; // On met toutes les distances à +infini
-            Vertex.FindVertexWithID(i, g).graphPred = new int[distances.length];
+            L3_C5_Vertex.FindVertexWithID(i, g).graphPred = new int[distances.length];
         }
         distances[0] = 0;
         this.g = g;
@@ -40,7 +40,7 @@ public class L3_C5_dijsktra
         
         
         // Initialisation   
-        Vertex premierSommet = Vertex.FindVertexWithID(0, g);
+        L3_C5_Vertex premierSommet = L3_C5_Vertex.FindVertexWithID(0, g);
         this.chemin.add(premierSommet);
         
         // Recherche
@@ -56,7 +56,7 @@ public class L3_C5_dijsktra
         AfficherTableauDijsktra();
     }
     
-    void AjouterAuChemin(Vertex sommet)
+    void AjouterAuChemin(L3_C5_Vertex sommet)
     {
        chemin.add(sommet);
     }
@@ -66,9 +66,9 @@ public class L3_C5_dijsktra
       // On regarde le dernier sommet du chemin tous les sommets et on regarde celui avec la plus petite distance DEPUIS LE DEBUT 
        
         // On prend le dernier élement de notre chemin
-      Vertex dernierSommet  =   chemin.get(chemin.size()-1);
+      L3_C5_Vertex dernierSommet  =   chemin.get(chemin.size()-1);
         System.out.println("Dernier sommet : " + dernierSommet.ID);
-      ArrayList<Vertex> sommetsSortants =  Vertex.FindVertexWithID(dernierSommet.ID,g).getAllNeighbours(g);
+      ArrayList<L3_C5_Vertex> sommetsSortants =  L3_C5_Vertex.FindVertexWithID(dernierSommet.ID,g).getAllNeighbours(g);
       AssignerDistancesDesSommetsSortantsParRapportAuDernierSommet(sommetsSortants,dernierSommet);
     }
 
@@ -99,16 +99,16 @@ public class L3_C5_dijsktra
         return code;
     }
     
-    private void AssignerDistancesDesSommetsSortantsParRapportAuDernierSommet(ArrayList<Vertex> sommetsSortants, Vertex dernierSommetChemin) 
+    private void AssignerDistancesDesSommetsSortantsParRapportAuDernierSommet(ArrayList<L3_C5_Vertex> sommetsSortants, L3_C5_Vertex dernierSommetChemin) 
     {
-        for (Vertex sommet : sommetsSortants)
+        for (L3_C5_Vertex sommet : sommetsSortants)
         {
             // On ne touche pas aux sommets qui ont déjà été ajoutés au chemin pour leurs distances (verrouillage)
-            if(!chemin.contains(Vertex.FindVertexWithID(sommet.ID, g)))
+            if(!chemin.contains(L3_C5_Vertex.FindVertexWithID(sommet.ID, g)))
             {
                 // comment recalcule t'on une distance ? on prend la distance du premier sommet jusqu'à celui ci
                 distances[sommet.ID] = distances[dernierSommetChemin.ID] + sommet.getArcComingFrom(dernierSommetChemin.ID).value;
-                Vertex.FindVertexWithID(sommet.ID, g).graphPred[etape_ID] = dernierSommetChemin.ID;
+                L3_C5_Vertex.FindVertexWithID(sommet.ID, g).graphPred[etape_ID] = dernierSommetChemin.ID;
                 // Une fois qu'on a recalculé et assigné les distances, on peut passer à l'étape suivante
                 // Il faut ajouter le nouveau sommet au chemin en comparant toutes nos distances
                    ActualiserMatriceDeDijkstra(etape_ID);
@@ -116,7 +116,7 @@ public class L3_C5_dijsktra
         }
         // On ajoute le nouveau sommet avec la distance minimale
              int sommetMinIndex = ObtenirLeSommetHorsCheminAvecLaDistanceMinimale();  
-                AjouterAuChemin(Vertex.FindVertexWithID(sommetMinIndex, g));
+                AjouterAuChemin(L3_C5_Vertex.FindVertexWithID(sommetMinIndex, g));
         System.out.println("Sommet Ajouté : "+ chemin.get(chemin.size()-1));
         VoirLesDistances();
         System.out.println("Taille actuelle " + chemin.size() + "/" + listeSommets.size() );
@@ -126,7 +126,7 @@ public class L3_C5_dijsktra
         int minDist = Integer.MAX_VALUE;
         int ID_Sommet = Integer.MAX_VALUE;
         for (int i = 0; i < distances.length; i++) {
-            if(!chemin.contains(Vertex.FindVertexWithID(i, g))) // On vérifie que le sommet n'est pas verrouillé
+            if(!chemin.contains(L3_C5_Vertex.FindVertexWithID(i, g))) // On vérifie que le sommet n'est pas verrouillé
             {
                  if( distances[i] < minDist)
                  {
@@ -144,7 +144,7 @@ public class L3_C5_dijsktra
         // Correction des predecesseurs dans le graphe
         for(int i =0 ; i < distances.length ;i++)
         {
-            Vertex v = Vertex.FindVertexWithID(i, g);
+            L3_C5_Vertex v = L3_C5_Vertex.FindVertexWithID(i, g);
             for (int j = 1; j < distances.length; j++) {
                 if(v.graphPred[j] == 0 && v.graphPred[j-1]!=0)
                     v.graphPred[j] = v.graphPred[j-1];
@@ -170,7 +170,7 @@ public class L3_C5_dijsktra
             System.out.print(ObtenirCode(i) + "\t|");
             for (int j = 0; j <  listeSommets.size(); j++) { // Colonnes qui representent les sommets
                 if(dijkstraMatrix[i][j] !=Integer.MAX_VALUE)
-                    System.out.print( dijkstraMatrix[i][j] +"("+ Vertex.FindVertexWithID(j, g).graphPred[i] + ")" );
+                    System.out.print( dijkstraMatrix[i][j] +"("+ L3_C5_Vertex.FindVertexWithID(j, g).graphPred[i] + ")" );
                 else 
                     System.out.print("∞");
                 System.out.print("\t");

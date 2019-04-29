@@ -12,13 +12,19 @@ import java.util.HashSet;
  *
  * @author franc
  */
-public class Vertex // Sommet
+
+
+public class L3_C5_Vertex // Sommet
 {
     // désigne les successeurs et prédécesseurs
-    public ArrayList<L3_C5_Arc> arcs = new ArrayList<>();    
-    int ID;     // valeur du sommet
+    public ArrayList<L3_C5_Arc> arcs = new ArrayList<>();
+    // valeur du sommet
+    int ID;     
+    // Liste ID sommet entrant
     public ArrayList<Integer> predValues = new ArrayList<>();
+    // Liste ID sommet sortant
     public ArrayList<Integer> succValues = new ArrayList<>();
+    // utilisé dans dijsktra: jistorique sommet précédent
     public int[] graphPred = null;
     
     
@@ -34,31 +40,33 @@ public class Vertex // Sommet
     }
     
     // Nécéssaire pour créer nos sommets à l'aide d'arcs
-    public Vertex(int value) 
+    public L3_C5_Vertex(int value) 
     {
        this.ID = value;
     }
     
-    public Vertex(int value, ArrayList<L3_C5_Arc> arcs)
+    public L3_C5_Vertex(int value, ArrayList<L3_C5_Arc> arcs)
     {
         this.arcs = arcs;
         this.ID = value;
     }
     
-    public ArrayList<Vertex> getAllNeighbours(L3_C5_Graph graph)
+    // prend en entrée un graphe
+    // retourne les sommets voisin sortant du sommet instancié. 
+    public ArrayList<L3_C5_Vertex> getAllNeighbours(L3_C5_Graph graph)
     {
         HashSet neighbours = new HashSet();
         for(L3_C5_Arc arc : arcs)
         {
             System.out.println("arc :"+ arc.value);
-           neighbours.add(Vertex.FindVertexWithID(arc.termExtremityValue, graph));
+           neighbours.add(L3_C5_Vertex.FindVertexWithID(arc.termExtremityValue, graph));
         }
         neighbours.remove(this);
         
         return new ArrayList<>(neighbours);
     }
 
-    
+    // retourne l'arc allant du sommet instancié au sommet "value"
     public L3_C5_Arc getArcGoingTo(int value)
     {
         for(L3_C5_Arc a : arcs)
@@ -67,7 +75,7 @@ public class Vertex // Sommet
         return null;
     }
     
-      
+    // retourne l'arc allant du sommet "value" au sommet instancié
     public L3_C5_Arc getArcComingFrom(int value)
     {
         for(L3_C5_Arc a : arcs)
@@ -78,7 +86,7 @@ public class Vertex // Sommet
     
 
     
-    // Arcs sortants du sommet
+    // Arcs sortants du sommet instancié
     public ArrayList<L3_C5_Arc> getOutgoingArcs()
     {
         ArrayList<L3_C5_Arc> arcList = new ArrayList();
@@ -90,13 +98,14 @@ public class Vertex // Sommet
         return arcList;
     }
     
+    
     // Permet d'obtenir directement une liste de sommets à partir de la liste des numéros de ces sommets
-    public static ArrayList<Vertex> getVerticesFromValues(ArrayList<Integer> values, L3_C5_Graph graph)
+    public static ArrayList<L3_C5_Vertex> getVerticesFromValues(ArrayList<Integer> values, L3_C5_Graph graph)
     {
-        ArrayList<Vertex> vertices= new ArrayList<>();
+        ArrayList<L3_C5_Vertex> vertices= new ArrayList<>();
         for( Integer i : values )
         {
-            vertices.add(Vertex.FindVertexWithID(i, graph));
+            vertices.add(L3_C5_Vertex.FindVertexWithID(i, graph));
         }
         return vertices;
     }
@@ -112,10 +121,10 @@ public class Vertex // Sommet
         }
         return arcs;
     }
-           
-        public static Vertex FindVertexWithID(int vertexID, L3_C5_Graph graph)
+        // retourne l'objet vertex ayant comme index "vertexID"
+        public static L3_C5_Vertex FindVertexWithID(int vertexID, L3_C5_Graph graph)
     {
-        for(Vertex v : graph.allVertex )
+        for(L3_C5_Vertex v : graph.allVertex )
         {
             if(v.ID == vertexID)
                 return v;

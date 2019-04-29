@@ -26,12 +26,25 @@ public final class L3_C5_Graph {
     
     private int vertexCount = 0; // Nombre de sommets
     
+    // liste des graphes
     public static ArrayList<L3_C5_Graph> graphesMem  = new ArrayList<L3_C5_Graph>();
+    
+    // graphe sur lequel on applique lesalgorithmes
     public static L3_C5_Graph selectedGraph = null;
+    
+    // liste de tous les arcs
     public ArrayList<L3_C5_Arc> allArcs = new ArrayList<L3_C5_Arc>();
-    public ArrayList<Vertex> allVertex = new ArrayList<Vertex>();
-    private String fileName; // Le fichier qui permet de charger le graphe   
+    
+    // liste de tous les sommets
+    public ArrayList<L3_C5_Vertex> allVertex = new ArrayList<L3_C5_Vertex>();
+    
+    // Le fichier qui permet de charger le graphe 
+    private String fileName;   
+    
+    // matrice d'adjacence 
     private  boolean[][] adjMatrix;
+    
+    // matrice d'incidence
     private int[][] incidenceMatrix;
    
         /**
@@ -48,6 +61,7 @@ public final class L3_C5_Graph {
         return incidenceMatrix;
     }
     
+    // constructeur qui lit les donnés dans el fichier et remplis l'objet avec ces données.
     public L3_C5_Graph(String graphFilePath)
     {
          String[] fileParts =  graphFilePath.split("\\\\");
@@ -93,7 +107,7 @@ public final class L3_C5_Graph {
         }
          
               ArrayList<Integer> createdVertexValues = new ArrayList<Integer>();
-              ArrayList<Vertex> vertexList = new ArrayList<Vertex>();
+              ArrayList<L3_C5_Vertex> vertexList = new ArrayList<L3_C5_Vertex>();
               
               //On obtient la valeur maximale du dernier sommet avec au moins un arc
               int lastIndicatedVertexValue = allArcs.get(allArcs.size()-1).initExtremityValue;
@@ -101,7 +115,7 @@ public final class L3_C5_Graph {
               // A l'aide de tous nos arcs, on crée les sommets
               for (int i = 0; i< vertexCount;i++)
               {
-                  Vertex v = new Vertex(i);
+                  L3_C5_Vertex v = new L3_C5_Vertex(i);
                   for(L3_C5_Arc a : allArcs)
                   {
                       if(v.ID == a.initExtremityValue || v.ID == a.termExtremityValue)
@@ -115,9 +129,9 @@ public final class L3_C5_Graph {
               int i =0;
               while(unlinkedVertexCount>0) // Création de sommets sans arcs
               {
-                  vertexList.add(new Vertex(vertexCount-unlinkedVertexCount)); 
+                  vertexList.add(new L3_C5_Vertex(vertexCount-unlinkedVertexCount)); 
               }
-              for(Vertex v : vertexList)
+              for(L3_C5_Vertex v : vertexList)
               {
                   v.predValues = GetPredecessorsValues(v) ;
                   v.succValues = GetSuccValues(v);
@@ -139,7 +153,7 @@ public final class L3_C5_Graph {
         return s;
     }
     
-    
+    // affichage debug
     public void printStructure()
     {
         System.out.println("---------------Début de l'affichage long--------------");
@@ -147,7 +161,7 @@ public final class L3_C5_Graph {
         System.out.println(this);
         System.out.println("Affichage des Sommets  : " + System.lineSeparator());
         int i =0;
-        for(Vertex v : allVertex )
+        for(L3_C5_Vertex v : allVertex )
         {
             System.out.println("Affichage sommet n°" + i);
             System.out.println(v.toString());
@@ -174,7 +188,7 @@ public final class L3_C5_Graph {
         {
             for(int j =0; j < vertexCount ; j++)
             {
-                for(L3_C5_Arc a : Vertex.FindVertexWithID(i,this).arcs )
+                for(L3_C5_Arc a : L3_C5_Vertex.FindVertexWithID(i,this).arcs )
                 {
                     if(i == a.initExtremityValue && j==a.termExtremityValue)
                     {
@@ -225,10 +239,7 @@ public final class L3_C5_Graph {
         System.out.println(finalLine);
     }
     
-    void printValuesMatrix()
-    {
-        
-    }
+
     
     // une matrice des valeurs où là aussi les arcs non existants sont préférablement remplacés par du vide ou des traits
         void printIncidenceMatrix()
@@ -247,7 +258,7 @@ public final class L3_C5_Graph {
             {
                 for(int vertIndex = 0; vertIndex < vertexCount; vertIndex++)
                 {
-                      curVertexId = Vertex.FindVertexWithID(vertIndex, this).ID;
+                      curVertexId = L3_C5_Vertex.FindVertexWithID(vertIndex, this).ID;
                       if(allArcs.get(arcIndex).initExtremityValue == curVertexId )
                       incidenceMatrix[vertIndex][arcIndex] = 1;
                       else if  (allArcs.get(arcIndex).termExtremityValue == curVertexId)   
@@ -274,7 +285,7 @@ public final class L3_C5_Graph {
     }
     
     // Predecesseurs directs (rang n-1)
-     public ArrayList<Integer> GetPredecessorsValues(Vertex v)
+     public ArrayList<Integer> GetPredecessorsValues(L3_C5_Vertex v)
     {
         ArrayList<Integer> preds = new ArrayList<>();
         for(L3_C5_Arc a : v.arcs)
@@ -283,7 +294,7 @@ public final class L3_C5_Graph {
         return preds;
     }
      
-    public ArrayList<Integer> GetSuccValues(Vertex v)
+    public ArrayList<Integer> GetSuccValues(L3_C5_Vertex v)
     {
         ArrayList<Integer> succs = new ArrayList<>();
         for(L3_C5_Arc a : v.arcs)
@@ -300,49 +311,6 @@ public final class L3_C5_Graph {
             if(a.value<0) return L3_C5_PathAlgorithm.Bellman; // Si au moins 1 arc a une valeur négative, alors Bellman est obligatoire 
         return L3_C5_PathAlgorithm.Dijkstra;
     }
-    
-
-    //Dijkstra seulement
-    int getWeightForPath(ArrayList<Vertex> vertices)
-    { 
-        
-        int weight = 0;
-        HashSet<L3_C5_Arc> arcs = new HashSet<>();
-        for (int i = 0; i < vertices.size(); i++) 
-        {
-          arcs.addAll(vertices.get(i).arcs);
-        }
-        for(L3_C5_Arc arc : arcs)
-            weight+=arc.value;
-        System.out.println("weight : "  + arcs);
-        return weight;
-    }
-    
-    int getWeightForPathIntegers(ArrayList<Integer> verticesValues)
-    { 
-        int weight = 0;
-        HashSet<L3_C5_Arc> arcs = new HashSet<>();
-                    Vertex v;
-        for (int i = 0; i < verticesValues.size(); i++) 
-        {
-            v = Vertex.FindVertexWithID(verticesValues.get(i), this);
-            arcs.addAll(v.arcs);
-            weight+=v.arcs.get(i).value;
-        }
-        System.out.println(arcs);
-        System.out.println("weight = "  + weight);
-        
-        return weight;
-    }
-    
-    
-    
-    
-//    GraphPath[] GetPaths()
-//    {
-//        return null;
-//    }
-
     
     
     

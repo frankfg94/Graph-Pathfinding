@@ -15,20 +15,11 @@ import java.util.ArrayList;
  */
 public class L3_C5_Arc 
 {
-    public Vertex initialExtremity; // pas utilisé pour l'instant à par dans le constructeur L3_C5_Arc(int ID, Vertex initExtremity, Vertex termExtremity)
-    public Vertex terminalExtremity; // pas utilisé pour l'instant à par dans le constructeur L3_C5_Arc(int ID, Vertex initExtremity, Vertex termExtremity)
-    public int initExtremityValue = -1;
-    public int termExtremityValue = -1;
-    public int value = -1; // Nombre qui identifie notre sommet
+    public int initExtremityValue = -1; // identifiant du vertex de départ
+    public int termExtremityValue = -1; // identifiant du vertex d'arrivée
+    public int value = -1; // valeur du poid de l'arc.
     
-    public L3_C5_Arc(int value, Vertex initExtremity, Vertex termExtremity)
-    {
-        this.value=value;
-        this.initialExtremity = initExtremity;
-        this.terminalExtremity = termExtremity;
-        this.initExtremityValue = initExtremity.ID;
-        this.termExtremityValue = termExtremity.ID;
-    }
+
     
     public L3_C5_Arc(int value, int initExtremityValue, int termExtremityValue)
     {
@@ -48,13 +39,15 @@ public class L3_C5_Arc
 //       
 //    }
 
-    public Vertex getInitialExtremity(L3_C5_Graph graph) 
+    // retourne l'objet vertex entrant de l'arc
+    public L3_C5_Vertex getInitialExtremity(L3_C5_Graph graph) 
     {
-      return Vertex.FindVertexWithID(initExtremityValue, graph);
+      return L3_C5_Vertex.FindVertexWithID(initExtremityValue, graph);
     }
     
-    public Vertex getTerminalExtremity(L3_C5_Graph graph) 
+    // retourne l'objet vertex sortant de l'arc
+    public L3_C5_Vertex getTerminalExtremity(L3_C5_Graph graph) 
     {
-      return Vertex.FindVertexWithID(termExtremityValue, graph);
+      return L3_C5_Vertex.FindVertexWithID(termExtremityValue, graph);
     }
 }
