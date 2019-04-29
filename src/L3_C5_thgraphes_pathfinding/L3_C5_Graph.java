@@ -61,6 +61,11 @@ public final class L3_C5_Graph {
         return incidenceMatrix;
     }
     
+    public int getVertexCount()
+    {
+        return vertexCount;
+    }
+    
     // constructeur qui lit les donnés dans el fichier et remplis l'objet avec ces données.
     public L3_C5_Graph(String graphFilePath)
     {
