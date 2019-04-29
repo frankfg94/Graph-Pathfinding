@@ -32,7 +32,7 @@ public class L3_C5_main {
         g.printStructure();
         g.printAdjMatrix();
         g.printIncidenceMatrix();
-        dijsktra_new dij = new dijsktra_new(g);
+        L3_C5_dijsktra dij = new L3_C5_dijsktra(g);
         //g.CalculateAndShowPathfinding(L3_C5_PathAlgorithm.Dijkstra, true);
     }
 

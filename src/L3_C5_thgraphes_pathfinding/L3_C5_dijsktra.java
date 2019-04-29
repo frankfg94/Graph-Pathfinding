@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 
 
-public class dijsktra_new 
+public class L3_C5_dijsktra 
 {
     
     int[][] dijkstraMatrix;
@@ -24,7 +24,7 @@ public class dijsktra_new
     int etape_ID = 0;
     L3_C5_Graph g;
     int[] distances;
-    public dijsktra_new(L3_C5_Graph g)
+    public L3_C5_dijsktra(L3_C5_Graph g)
     {
         int vertexCount = g.allVertex.size();
         dijkstraMatrix = new int[vertexCount][vertexCount];
