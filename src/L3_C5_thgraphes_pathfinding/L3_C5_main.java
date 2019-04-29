@@ -28,11 +28,15 @@ public class L3_C5_main {
     
     private static void TestAllGraphs()
     {
-        L3_C5_Graph g = new L3_C5_Graph("L3_C5_slide33.txt");
-        g.printStructure();
+        L3_C5_Graph g = new L3_C5_Graph("L3_C5_slide43.txt");
+        /*g.printStructure();
         g.printAdjMatrix();
-        g.printIncidenceMatrix();
-        L3_C5_dijsktra dij = new L3_C5_dijsktra(g);
+        g.printIncidenceMatrix();*/
+        //L3_C5_dijsktra dij = new L3_C5_dijsktra(g);
+        
+        L3_C5_Bellman bell = new L3_C5_Bellman(g,0);
+        bell.process();
+        
         //g.CalculateAndShowPathfinding(L3_C5_PathAlgorithm.Dijkstra, true);
     }
 

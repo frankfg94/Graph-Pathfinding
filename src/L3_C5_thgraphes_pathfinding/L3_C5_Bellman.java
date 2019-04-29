@@ -1,23 +1,121 @@
 package L3_C5_thgraphes_pathfinding;
 
-
 import java.util.Arrays;
 import java.util.ArrayList;
-
+import java.util.Set;
+import java.util.LinkedHashSet;
 
 
 public class L3_C5_Bellman 
 {
-    private class k_line extends ArrayList<ArrayList<Integer>> {}
+    
+    private class Pair
+    {
+        int i;
+        int val;
+        
+        Pair(int i, int val)
+        {
+            this.i = i;
+            this.val = val;
+        }
+    }
+    private class Bellcase
+    {
+        int poid;
+        ArrayList<Integer> sommets;
+        
+        Bellcase() {}
+        
+        Bellcase(int poid)
+        {
+            this.poid = poid;
+            this.sommets = new ArrayList<>();
+        }
+    }
+    // k_line correspond à une ligne d'étape. On réduit ici le nom de son type.
+    private class k_line extends ArrayList<Bellcase> {}
 
+ 
+    /**
+     * Initialise un k_line
+     * @param c nombre d'élément
+     * @return un nouveau k_line
+     */
     private k_line new_kline(int c)
     {
         k_line nkline = new k_line();
         for(int i = 0; i < c; i++)
         {
-            ArrayList<Integer> tmp = new ArrayList<>();
-            tmp.add(0);
-            tmp.add(-1);
+            nkline.add(i,new Bellcase());
+            nkline.get(i).poid = 0;
+            nkline.get(i).sommets = new ArrayList<>();
+        }
+        return nkline;
+    }
+    
+    private void print_kline(k_line l)
+    {
+        if(l == null)
+        {
+            System.out.println("NULL");
+            return;
+        }
+        
+        
+        for(int i = 0; i < l.size(); i++)
+        {
+            System.out.print("["+l.get(i).poid+"] ");
+            for(int j = 0; j < l.get(i).sommets.size(); j++)
+            {
+                System.out.print(l.get(i).sommets.get(j)+" ");
+            }
+            System.out.println(" ");
+        }
+        
+        System.out.println("Press Enter key to continue...");
+        try
+        {
+            System.in.read();
+        }  
+        catch(Exception e)
+        {}  
+    }
+    
+    private boolean cmp_kline(k_line a, k_line b)
+    {
+        if(a == null || b == null)
+        {
+            return false;
+        }
+        
+        if(a.size() != b.size())
+        {
+            return false;
+        }
+        
+        for(int i = 0; i < a.size(); i++)
+        {
+            if(a.get(i).poid != b.get(i).poid)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private k_line cp_kline(k_line a)
+    {
+        k_line nkline = new k_line();
+        for(int i = 0; i < a.size(); i++)
+        {
+            Bellcase tmp = new Bellcase();
+            tmp.poid = a.get(i).poid;
+            tmp.sommets = new ArrayList<>();
+            for(int j = 0; j < a.get(i).sommets.size(); j++)
+            {
+                tmp.sommets.add(a.get(i).sommets.get(j));
+            }
             nkline.add(tmp);
         }
         return nkline;
@@ -29,7 +127,7 @@ public class L3_C5_Bellman
     int start = 0;
     int vcount = 0;
     //Double ArrayList (tableau de bellman)
-    ArrayList<k_line> bellman_array;
+    ArrayList<k_line> bellman_array = new ArrayList<>();
     
     /**
      * Constructeur
@@ -48,132 +146,62 @@ public class L3_C5_Bellman
      */
     public void process()
     {
+        k_line init = new_kline(vcount);
+        init.get(0).poid = 0;
+        init.get(0).sommets.add(start);
+        print_kline(init);
+        
         k_line a = null;
-        k_line b = new_kline(vcount);
-        
-        
-        b.set(0, new ArrayList<>(Arrays.asList(0,start)));
-        
-
+        k_line b = init;
+        ArrayList<Integer> next_somm = new ArrayList(Arrays.asList((0)));
         do
         {
-            bellman_array.add(b);
+            bellman_array.add(a);
+            print_kline(b);
             a = b;
-            b = new_kline(vcount);
-            // je parcours a et b de 0 à vcount -1;
-            for(int i = 0; i < vcount; i++)
+            b = cp_kline(a);
+            ArrayList<L3_C5_Arc>  succ = get_succ(next_somm);
+            next_somm = new ArrayList();
+            
+            for(int i = 0; i < succ.size(); i++)
             {
-                b.set(i,get_new_iter(a,i));
-            }
-        }while(!k_equal(a,b));
-    }
-    
-    private ArrayList<Integer> get_new_iter(k_line km1, int v)
-    {
-        k_line stock = new k_line();
-        for(int i = 0; i < vcount; i++)
-        {
-            if(!km1.get(1).equals(-1))
-            for(int j = 0; j < km1.get(i).size(); j++)
-            {
-                ArrayList<Integer> res = null; //FIXME
-                if(res != null)
+                int tterm = succ.get(i).termExtremityValue;
+                int tinit = succ.get(i).initExtremityValue;
+                int npds = b.get(tinit).poid + succ.get(i).value;
+                
+                //System.out.println(i+" "+tterm+" "+tinit);
+                //System.out.println(a.get(tterm).sommets.isEmpty()+" "+a.get(tterm).poid+" "+npds );
+                int diff = npds - b.get(tterm).poid;
+                if(b.get(tterm).sommets.isEmpty() || diff < 0)
+               {
+                    Bellcase bctmp = new Bellcase(npds);
+                    bctmp.sommets.add(tinit);
+                    b.set(tterm,bctmp);
+                    next_somm.add(tterm);
+
+                } else if(b.get(tterm).poid == npds)
                 {
-                    stock.add(res);
+                    b.get(tterm).sommets.add(tinit);
+                    next_somm.add(tterm);
                 }
             }
-        }
-        
-        if(stock.isEmpty())
-        {
-            return new ArrayList<>(Arrays.asList(0,-1));
-        }
-        int min = stock.get(0).get(0);
-        ArrayList<Integer> min_ids = new ArrayList<>();
-        for(int i = 0; i < stock.size(); i++)
-        {
-            int t = stock.get(i).get(0);
-            if(min > t)
-            {
-                min = t;
-            }
-        }
-        ArrayList<Integer> return_value = new ArrayList<>();
-        return_value.add(min);
-        for(int i = 0; i < stock.size(); i++)
-        {
-            if(stock.get(i).get(0) == min)
-            {
-                for(int j = 1; j < stock.get(i).size(); j++)
-                {
-                    return_value.add(stock.get(i).get(j));
-                }
-            }
-        }
-        
-        return sort_arr_list(return_value);
-        
+            
+        }while(!(cmp_kline(a,b)));
     }
     
     
-    
-    
-    /**
-     * Afficher les résulstats de l'algorithme
-     */
-    public void print()
+    private ArrayList<L3_C5_Arc> get_succ(ArrayList<Integer> somm)
     {
-        
-    }
-    
-    /**
-     * Compare deux k_equal (permet de vérifier si on a fini ou non les ittérations)
-     * @param a element 1
-     * @param b element 2
-     * @return faux si différent
-     */
-    private boolean k_equal(k_line a, k_line b)
-    {
-        if(a == null || b == null)
-            return false;
-        // les deux k_lines ont FORCEMENT la meme taille
-        assert a.size() == b.size();
-        for(int i = 0; i < a.size(); i++)
+        ArrayList<L3_C5_Arc> arcs = new ArrayList<>();
+        for(int i = 0; i < somm.size(); i++)
         {
-            if(a.get(i).size() != b.get(i).size())
-            {
-                return false;
-            }
-            for(int j = 0; j < a.get(i).size();j++)
-            {
-                if(!(a.get(i).get(j).equals(b.get(i).get(j))))
-                {
-                    return false;
-                }
-            }
+            L3_C5_Vertex v = L3_C5_Vertex.FindVertexWithID(somm.get(i),g);
+            arcs.addAll(v.getOutgoingArcs());
         }
-        return true;
-    }
-   
-    
-    private ArrayList<Integer>  sort_arr_list(ArrayList<Integer> a)
-    {
-        ArrayList<Integer> new_arr = new ArrayList<>();
-        new_arr.add(a.get(0));
-        for(int i = 1; i < a.size(); i++)
-        {
-           int j =1;
-           int val = a.get(i);
-           while(j < new_arr.size() && val < new_arr.get(j))
-           {
-               j++;
-           }
-           if(!a.get(i).equals(new_arr.get(j)))
-           {
-               new_arr.add(i,val);
-           }
-        }
-        return new_arr;
+        return arcs;
     }
     
+    
+
 }
+
