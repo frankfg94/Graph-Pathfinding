@@ -28,7 +28,8 @@ public class L3_C5_main {
     
     private static void TestAllGraphs()
     {
-        L3_C5_Graph g = new L3_C5_Graph("L3_C5_slide43.txt");
+        //L3_C5_Graph g = new L3_C5_Graph("L3_C5_g02.txt");
+        L3_C5_Graph g = new L3_C5_Graph("L3_C5_g02.txt");
         /*g.printStructure();
         g.printAdjMatrix();
         g.printIncidenceMatrix();*/

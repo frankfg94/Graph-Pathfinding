@@ -104,6 +104,26 @@ public class L3_C5_Bellman
         return true;
     }
     
+        private boolean cmp_kline_pred(k_line a, k_line b)
+    {
+        if(a == null || b == null)
+        {
+            return false;
+        }
+        
+        if(a.size() != b.size())
+        {
+            return false;
+        }
+        
+        for(int i = 0; i < a.size(); i++)
+        {
+            if(!a.get(i).sommets.equals(b.get(i).sommets))
+                return false;
+        }
+        return true;
+    }
+    
     private k_line cp_kline(k_line a)
     {
         k_line nkline = new k_line();
@@ -154,6 +174,7 @@ public class L3_C5_Bellman
         k_line a = null;
         k_line b = init;
         ArrayList<Integer> next_somm = new ArrayList(Arrays.asList((0)));
+        boolean stop = false;
         do
         {
             bellman_array.add(a);
@@ -187,7 +208,14 @@ public class L3_C5_Bellman
                 }
             }
             
-        }while(!(cmp_kline(a,b)));
+         if(cmp_kline_pred(a,b))
+         {
+             if(!cmp_kline(a,b))
+                System.out.println("Cycle absorbant détécté !");
+             stop = true;
+         }
+            
+        }while(!stop);
         bellman_array.add(a);
         bellman_array.add(b);
     }
@@ -230,8 +258,23 @@ public class L3_C5_Bellman
                 }
                 else
                 {
-                    lst_more.add(bellman_array.get(i).get(j).sommets);
-                    System.out.printf("| %2d( %c)",bellman_array.get(i).get(j).poid,'A'+lst_more.size() - 1);
+                    int letter = 0;
+                    boolean found = false;
+                    for(int l = 0;!found && l < lst_more.size(); l++)
+                    {
+                        if(lst_more.get(l).equals(bellman_array.get(i).get(j).sommets))
+                        {
+                            found = true;
+                            letter = l;
+                        }
+                            
+                    }
+                    if(!found)
+                    {
+                        letter = lst_more.size();
+                        lst_more.add(bellman_array.get(i).get(j).sommets);
+                    }
+                    System.out.printf("| %2d( %c)",bellman_array.get(i).get(j).poid,'A'+ letter);
                 }
             }
             
@@ -255,6 +298,8 @@ public class L3_C5_Bellman
             System.out.println(" ");
         }
     }
+    
+
     
     private ArrayList<L3_C5_Arc> get_succ(ArrayList<Integer> somm)
     {
