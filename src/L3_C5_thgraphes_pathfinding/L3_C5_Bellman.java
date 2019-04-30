@@ -149,7 +149,7 @@ public class L3_C5_Bellman
         k_line init = new_kline(vcount);
         init.get(0).poid = 0;
         init.get(0).sommets.add(start);
-        print_kline(init);
+        //print_kline(init);
         
         k_line a = null;
         k_line b = init;
@@ -157,7 +157,7 @@ public class L3_C5_Bellman
         do
         {
             bellman_array.add(a);
-            print_kline(b);
+            //print_kline(b);
             a = b;
             b = cp_kline(a);
             ArrayList<L3_C5_Arc>  succ = get_succ(next_somm);
@@ -167,7 +167,7 @@ public class L3_C5_Bellman
             {
                 int tterm = succ.get(i).termExtremityValue;
                 int tinit = succ.get(i).initExtremityValue;
-                int npds = b.get(tinit).poid + succ.get(i).value;
+                int npds = a.get(tinit).poid + succ.get(i).value;
                 
                 //System.out.println(i+" "+tterm+" "+tinit);
                 //System.out.println(a.get(tterm).sommets.isEmpty()+" "+a.get(tterm).poid+" "+npds );
@@ -179,16 +179,82 @@ public class L3_C5_Bellman
                     b.set(tterm,bctmp);
                     next_somm.add(tterm);
 
-                } else if(b.get(tterm).poid == npds)
+                } else if(diff == 0)
                 {
+                    System.out.println("hello!");
                     b.get(tterm).sommets.add(tinit);
                     next_somm.add(tterm);
                 }
             }
             
         }while(!(cmp_kline(a,b)));
+        bellman_array.add(a);
+        bellman_array.add(b);
     }
     
+    public void print()
+    {
+        for(int i = 0; i < vcount + 1; i++)
+        {
+            System.out.printf("+-------");
+        }
+        System.out.printf("+\n");
+        System.out.printf("|  k    ");
+        for(int i = 0; i < vcount; i++)
+        {
+            System.out.printf("| %2d    ",i);
+        }
+        System.out.printf("|\n");
+        for(int i = 0; i < vcount + 1; i++)
+        {
+            System.out.printf("+-------");
+        }
+        System.out.printf("+\n");
+        
+        ArrayList<ArrayList<Integer>> lst_more = new ArrayList<>();
+        for(int i = 2; i < bellman_array.size(); i++)
+        {
+            if(bellman_array.get(i) == null)
+                continue;
+            System.out.printf("| %2d    ", i - 1);
+            
+            for(int j = 0; j < bellman_array.get(i).size(); j++)
+            {
+                if(bellman_array.get(i).get(j).sommets.isEmpty())
+                {
+                    System.out.printf("|  +    ");
+                }
+                else if(bellman_array.get(i).get(j).sommets.size() == 1)
+                {
+                    System.out.printf("| %2d(%2d)",bellman_array.get(i).get(j).poid,bellman_array.get(i).get(j).sommets.get(0));
+                }
+                else
+                {
+                    lst_more.add(bellman_array.get(i).get(j).sommets);
+                    System.out.printf("| %2d( %c)",bellman_array.get(i).get(j).poid,'A'+lst_more.size() - 1);
+                }
+            }
+            
+            System.out.printf("|\n");
+            
+            for(int j = 0; j < vcount + 1; j++)
+            {
+                System.out.printf("+-------");
+            }
+            System.out.printf("+\n");
+            
+            
+        }
+        for(int i = 0; i < lst_more.size(); i++)
+        {
+            System.out.print((char)('A' + i)+": ");
+            for(int j = 0; j < lst_more.get(i).size(); j++)
+            {
+                System.out.print(lst_more.get(i).get(j)+" ");
+            }
+            System.out.println(" ");
+        }
+    }
     
     private ArrayList<L3_C5_Arc> get_succ(ArrayList<Integer> somm)
     {

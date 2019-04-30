@@ -36,7 +36,7 @@ public class L3_C5_main {
         
         L3_C5_Bellman bell = new L3_C5_Bellman(g,0);
         bell.process();
-        
+        bell.print();
         //g.CalculateAndShowPathfinding(L3_C5_PathAlgorithm.Dijkstra, true);
     }
 
