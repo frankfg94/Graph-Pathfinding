@@ -20,20 +20,21 @@ public class L3_C5_main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        TestAllGraphs();
+        L3_C5_Dijsktra dij = new L3_C5_Dijsktra(new L3_C5_Graph("L3_C5_slide33.txt"));
+        dij.process();
+        dij.print();
     }
     
     
     
-    private static void TestAllGraphs()
+    private static void testAllGraphs()
     {
         //L3_C5_Graph g = new L3_C5_Graph("L3_C5_g02.txt");
         L3_C5_Graph g = new L3_C5_Graph("L3_C5_g02.txt");
         /*g.printStructure();
         g.printAdjMatrix();
         g.printIncidenceMatrix();*/
-        //L3_C5_dijsktra dij = new L3_C5_dijsktra(g);
+        //L3_C5_dijsktra dij = new L3_C5_Dijsktra(g);
         
         L3_C5_Bellman bell = new L3_C5_Bellman(g,0);
         bell.process();

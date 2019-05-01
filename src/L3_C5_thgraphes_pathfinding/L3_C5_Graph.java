@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -111,8 +110,7 @@ public final class L3_C5_Graph {
             Logger.getLogger(L3_C5_Graph.class.getName()).log(Level.SEVERE, null, ex);
         }
          
-              ArrayList<Integer> createdVertexValues = new ArrayList<Integer>();
-              ArrayList<L3_C5_Vertex> vertexList = new ArrayList<L3_C5_Vertex>();
+              ArrayList<L3_C5_Vertex> vertexList = new ArrayList<>();
               
               //On obtient la valeur maximale du dernier sommet avec au moins un arc
               int lastIndicatedVertexValue = allArcs.get(allArcs.size()-1).initExtremityValue;
