@@ -58,7 +58,6 @@ public class L3_C5_Vertex // Sommet
         HashSet neighbours = new HashSet();
         for(L3_C5_Arc arc : arcs)
         {
-            System.out.println("arc :"+ arc.value);
            neighbours.add(L3_C5_Vertex.FindVertexWithID(arc.termExtremityValue, graph));
         }
         neighbours.remove(this);

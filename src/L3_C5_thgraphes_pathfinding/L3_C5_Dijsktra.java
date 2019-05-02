@@ -18,7 +18,7 @@ public class L3_C5_Dijsktra
 {
     
     int[][] dijkstraMatrix; // Utilisé pour l'affichage du tableau de dijkstra
-    ArrayList<L3_C5_Vertex> path; // Chemin actuel du sommet initial (index 0) vers l'index maximal
+    ArrayList<L3_C5_Vertex> path; // Chemin actuel du sommet initial (précisé dans le constructeur) vers l'index maximal
     ArrayList<L3_C5_Vertex> listeSommets;  // Liste des sommets passée en copie
     int etape_ID = 0;
     L3_C5_Graph g;
@@ -26,9 +26,10 @@ public class L3_C5_Dijsktra
     
     /**
      * Le constructeur permet à la fois de lancer de générer et afficher l'algorithme de dijsktra
-     * @param g 
+     * @param g le graphe sur lequel effectuer l'algorithme
+     * @param startID sommet de départ
      */
-    public L3_C5_Dijsktra(L3_C5_Graph g)
+    public L3_C5_Dijsktra(L3_C5_Graph g, int startID)
     {
         int vertexCount = g.allVertex.size();
         dijkstraMatrix = new int[vertexCount][vertexCount];
@@ -44,7 +45,7 @@ public class L3_C5_Dijsktra
         
         
         // Initialisation   
-        L3_C5_Vertex premierSommet = L3_C5_Vertex.FindVertexWithID(0, g);
+        L3_C5_Vertex premierSommet = L3_C5_Vertex.FindVertexWithID(startID, g);
         this.path.add(premierSommet);
         
 
@@ -55,15 +56,15 @@ public class L3_C5_Dijsktra
      */
     void process()
     {
-           System.out.println("Début de la recherche de chemins Dijkstra");
+        //   System.out.println("Début de la recherche de chemins Dijkstra");
         while(path.size() != listeSommets.size())
         {
             addVertexMinDist();
             etape_ID++;
         }
         updateDijkstraMatrix(etape_ID-1);
-        System.out.println("Terminé !");
-        printPath();
+       // System.out.println("Terminé !");
+       // printPath();
     }
     
     void addToPath(L3_C5_Vertex sommet)
@@ -80,8 +81,9 @@ public class L3_C5_Dijsktra
        
         // On prend le dernier élement de notre path
       L3_C5_Vertex dernierSommet  =   path.get(path.size()-1);
-        System.out.println("Dernier sommet : " + dernierSommet.ID);
-      ArrayList<L3_C5_Vertex> sommetsSortants =  L3_C5_Vertex.FindVertexWithID(dernierSommet.ID,g).getAllNeighbours(g);
+   //     System.out.println("Dernier sommet : " + dernierSommet.ID);
+
+             ArrayList<L3_C5_Vertex> sommetsSortants =  L3_C5_Vertex.FindVertexWithID(dernierSommet.ID,g).getAllNeighbours(g);
       updateDists(sommetsSortants,dernierSommet);
     }
 
@@ -118,7 +120,12 @@ public class L3_C5_Dijsktra
     {
         String code = "";
         for (int i = 0; i < etape+1; i++) {
-            code += Integer.toString(path.get(i).ID);
+            try {
+                            code += Integer.toString(path.get(i).ID);
+
+            } catch (Exception e) {
+                code = "Erreur";
+            }
         }
         return code;
     }
@@ -133,7 +140,7 @@ public class L3_C5_Dijsktra
         for (L3_C5_Vertex sommet : sommetsSortants)
         {
             // On ne touche pas aux sommets qui ont déjà été ajoutés au path pour leurs distances (verrouillage)
-            if(!path.contains(L3_C5_Vertex.FindVertexWithID(sommet.ID, g)))
+            if(!path.contains(L3_C5_Vertex.FindVertexWithID(sommet.ID, g)) )
             {
                 // comment recalcule t'on une distance ? on prend la distance du premier sommet jusqu'à celui ci
                 distances[sommet.ID] = distances[dernierSommetChemin.ID] + sommet.getArcComingFrom(dernierSommetChemin.ID).value;
@@ -145,10 +152,10 @@ public class L3_C5_Dijsktra
         }
         // On ajoute le nouveau sommet avec la distance minimale
              int sommetMinIndex = getIDMinDist();  
-                addToPath(L3_C5_Vertex.FindVertexWithID(sommetMinIndex, g));
-        System.out.println("Sommet Ajouté : "+ path.get(path.size()-1));
-        printDists();
-        System.out.println("Taille actuelle " + path.size() + "/" + listeSommets.size() );
+        addToPath(L3_C5_Vertex.FindVertexWithID(sommetMinIndex, g));
+        //System.out.println("Sommet Ajouté : "+ path.get(path.size()-1));
+        //printDists();
+        //System.out.println("Taille actuelle " + path.size() + "/" + listeSommets.size() );
     }
 
     /**
@@ -156,8 +163,8 @@ public class L3_C5_Dijsktra
      * @return 
      */
     private int getIDMinDist() {
-        int minDist = Integer.MAX_VALUE;
-        int ID_Sommet = Integer.MAX_VALUE;
+        int minDist = Integer.MAX_VALUE; // +infini
+        int ID_Sommet = Integer.MAX_VALUE; // +infini
         for (int i = 0; i < distances.length; i++) {
             if(!path.contains(L3_C5_Vertex.FindVertexWithID(i, g))) // On vérifie que le sommet n'est pas verrouillé
             {
@@ -167,7 +174,6 @@ public class L3_C5_Dijsktra
                   ID_Sommet = i;
                  }
             }
-           
         }
         return ID_Sommet;
     }

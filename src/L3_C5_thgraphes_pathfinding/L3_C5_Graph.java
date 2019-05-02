@@ -32,10 +32,10 @@ public final class L3_C5_Graph {
     public static L3_C5_Graph selectedGraph = null;
     
     // liste de tous les arcs
-    public ArrayList<L3_C5_Arc> allArcs = new ArrayList<L3_C5_Arc>();
+    public ArrayList<L3_C5_Arc> allArcs = new ArrayList<>();
     
     // liste de tous les sommets
-    public ArrayList<L3_C5_Vertex> allVertex = new ArrayList<L3_C5_Vertex>();
+    public ArrayList<L3_C5_Vertex> allVertex = new ArrayList<>();
     
     // Le fichier qui permet de charger le graphe 
     private String fileName;   
@@ -75,7 +75,7 @@ public final class L3_C5_Graph {
          try (BufferedReader br = new BufferedReader(new FileReader(f))) {
          String line;
          boolean vertexCountAllocated = false;
-         System.out.println("Début lecture");
+        // System.out.println("Début lecture");
          if(f.length()>0)
          {
                while ((line = br.readLine()) != null && !"".equals(line.trim()))
@@ -83,7 +83,7 @@ public final class L3_C5_Graph {
               // On assigne le nombre de sommets
               if(!vertexCountAllocated)
               {
-                  try{vertexCount = Integer.parseInt(line); }catch(NumberFormatException e){System.out.println("Erreur lors de la lecture du nombre de sommets");e.printStackTrace();}
+                  try{vertexCount = Integer.parseInt(line); }catch(NumberFormatException e){System.err.println("Erreur lors de la lecture du nombre de sommets");e.printStackTrace();}
                   vertexCountAllocated = true;
              }
               else
@@ -95,7 +95,7 @@ public final class L3_C5_Graph {
              
              // avec ce tableau, on crée un arc car on veut 1 arc par ligne
              L3_C5_Arc arc = new L3_C5_Arc(Integer.parseInt(arcValuesString[1]),Integer.parseInt(arcValuesString[0]),Integer.parseInt(arcValuesString[2])); 
-            System.out.println("arc crée : "+arc);
+           // System.out.println("arc crée : "+arc);
              allArcs.add(arc);
               }
       
@@ -106,14 +106,11 @@ public final class L3_C5_Graph {
              System.out.println("Le fichier " + fileName + " existe mais est vide");
          }
 }         catch (IOException ex) {
-             System.out.println("Erreur de chargement du fichier texte");
-            Logger.getLogger(L3_C5_Graph.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(L3_C5_Graph.class.getName()).log(Level.SEVERE, "Erreur de chargement du fichier texte", ex);
         }
          
               ArrayList<L3_C5_Vertex> vertexList = new ArrayList<>();
               
-              //On obtient la valeur maximale du dernier sommet avec au moins un arc
-              int lastIndicatedVertexValue = allArcs.get(allArcs.size()-1).initExtremityValue;
               
               // A l'aide de tous nos arcs, on crée les sommets
               for (int i = 0; i< vertexCount;i++)
@@ -136,8 +133,8 @@ public final class L3_C5_Graph {
               }
               for(L3_C5_Vertex v : vertexList)
               {
-                  v.predValues = GetPredecessorsValues(v) ;
-                  v.succValues = GetSuccValues(v);
+                  v.predValues = getPredecessorsValues(v) ;
+                  v.succValues = getSuccValues(v);
               }
               allVertex = vertexList;
               graphesMem.add(this);
@@ -288,7 +285,7 @@ public final class L3_C5_Graph {
     }
     
     // Predecesseurs directs (rang n-1)
-     public ArrayList<Integer> GetPredecessorsValues(L3_C5_Vertex v)
+     public ArrayList<Integer> getPredecessorsValues(L3_C5_Vertex v)
     {
         ArrayList<Integer> preds = new ArrayList<>();
         for(L3_C5_Arc a : v.arcs)
@@ -297,7 +294,7 @@ public final class L3_C5_Graph {
         return preds;
     }
      
-    public ArrayList<Integer> GetSuccValues(L3_C5_Vertex v)
+    public ArrayList<Integer> getSuccValues(L3_C5_Vertex v)
     {
         ArrayList<Integer> succs = new ArrayList<>();
         for(L3_C5_Arc a : v.arcs)
@@ -308,13 +305,35 @@ public final class L3_C5_Graph {
         return succs;
     }
      
-    public L3_C5_PathAlgorithm GetRecommendedPathAlgorithm()
+    public L3_C5_PathAlgorithm getRecommendedPathAlgorithm()
     {
         for(L3_C5_Arc a : allArcs)
             if(a.value<0) return L3_C5_PathAlgorithm.Bellman; // Si au moins 1 arc a une valeur négative, alors Bellman est obligatoire 
         return L3_C5_PathAlgorithm.Dijkstra;
     }
     
+    public void testPathfinding(int startIndex)
+    {
+        try {
+                    if(getRecommendedPathAlgorithm() == L3_C5_PathAlgorithm.Bellman)
+        {
+            System.out.println("Algorithme à utiliser : Bellman pour " + this.fileName);
+            L3_C5_Bellman bellAlg =  new L3_C5_Bellman(this, startIndex);
+            bellAlg.process();
+            bellAlg.print();
+        }
+        else
+        {
+            System.out.println("Algorithme à utiliser : Dijkstra pour " + this.fileName);
+            L3_C5_Dijsktra dijAlg = new L3_C5_Dijsktra(this, startIndex);
+            dijAlg.process();
+            dijAlg.print();
+        }
+        } catch (Exception e) {
+            System.out.println("Erreur");
+        }
+
+    }
     
     
 }
