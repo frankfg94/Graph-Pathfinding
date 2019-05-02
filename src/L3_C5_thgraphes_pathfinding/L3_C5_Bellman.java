@@ -100,29 +100,18 @@ public class L3_C5_Bellman
             {
                 return false;
             }
+            if(a.get(i).sommets.size() != b.get(i).sommets.size())
+                return false;
+            for(int j = 0; j < a.get(i).sommets.size(); j++)
+            {
+                if(a.get(i).sommets.get(j) != b.get(i).sommets.get(j))
+                    return false;
+            }
         }
         return true;
     }
     
-        private boolean cmp_kline_pred(k_line a, k_line b)
-    {
-        if(a == null || b == null)
-        {
-            return false;
-        }
-        
-        if(a.size() != b.size())
-        {
-            return false;
-        }
-        
-        for(int i = 0; i < a.size(); i++)
-        {
-            if(!a.get(i).sommets.equals(b.get(i).sommets))
-                return false;
-        }
-        return true;
-    }
+
     
     private k_line cp_kline(k_line a)
     {
@@ -167,13 +156,13 @@ public class L3_C5_Bellman
     public void process()
     {
         k_line init = new_kline(vcount);
-        init.get(0).poid = 0;
-        init.get(0).sommets.add(start);
+        init.get(start).poid = 0;
+        init.get(start).sommets.add(start);
         //print_kline(init);
         
         k_line a = null;
         k_line b = init;
-        ArrayList<Integer> next_somm = new ArrayList(Arrays.asList((0)));
+        ArrayList<Integer> next_somm = new ArrayList(Arrays.asList((start)));
         boolean stop = false;
         do
         {
@@ -202,18 +191,23 @@ public class L3_C5_Bellman
 
                 } else if(diff == 0)
                 {
-                    System.out.println("hello!");
-                    b.get(tterm).sommets.add(tinit);
-                    next_somm.add(tterm);
+                    //System.out.println("hello!");
+                    if(!b.get(tterm).sommets.contains(tinit))
+                        b.get(tterm).sommets.add(tinit);
+                    if(!next_somm.contains(tterm))
+                        next_somm.add(tterm);
                 }
             }
             
-         if(cmp_kline_pred(a,b))
-         {
-             if(!cmp_kline(a,b))
-                System.out.println("Cycle absorbant détécté !");
-             stop = true;
-         }
+
+            if(bellman_array.size() > vcount + 1)
+            {
+                System.out.println("Cycle absorbant detecté !");
+                stop = true;
+            }
+            
+            if(cmp_kline(a,b))
+                stop = true;
             
         }while(!stop);
         bellman_array.add(a);

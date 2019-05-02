@@ -1,0 +1,2 @@
+javac src/L3_C5_thgraphes_pathfinding/*.java
+cp *.txt src/
