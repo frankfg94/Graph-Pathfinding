@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.java.j2seproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
-            <name>L3_C5_ThGraphes_pathfinding</name>
+            <name>theorie_graphe</name>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>

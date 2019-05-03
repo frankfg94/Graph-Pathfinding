@@ -1,4 +1,4 @@
-package L3_C5_thgraphes_pathfinding;
+package theorie_graphe;
 
 import java.util.Arrays;
 import java.util.ArrayList;
