@@ -46,6 +46,13 @@ public final class L3_C5_Graph {
     // matrice d'incidence
     private int[][] incidenceMatrix;
    
+    private int[][] valMatrix;
+    
+    
+    public int[][] getValMatrix()
+    {
+        return valMatrix;
+    }
         /**
      * @return the adjMatrix
      */
@@ -239,6 +246,51 @@ public final class L3_C5_Graph {
         System.out.println(finalLine);
     }
     
+    
+ 
+    void printValuesMatrix()
+    {
+        System.out.println("Affichage de la matrice des valeurs");
+        System.out.println("Nombre de sommets : "+vertexCount);
+        System.out.println("Nombre d'arcs     : "+allArcs.size());
+        // si la matrice d'adjacence n'a pas encore été créee on le fait maintenant
+        if(getValMatrix()==null || getValMatrix().length==0)
+        {
+             valMatrix = new int[vertexCount][vertexCount];
+        for(int i  = 0 ; i < vertexCount ; i++)
+        {
+            for(int j =0; j < vertexCount ; j++)
+            {
+                for(L3_C5_Arc a : L3_C5_Vertex.FindVertexWithID(i,this).arcs )
+                {
+                    if(i == a.initExtremityValue && j==a.termExtremityValue)
+                    {
+                         valMatrix[i][j] = a.value;
+                    }
+                }
+            }
+        }        
+        }
+                    System.out.print("\t");
+                    for(int i = 0; i < vertexCount;i++)
+                        System.out.print(" " + i+"\t");
+                    System.out.print("\t"+System.lineSeparator());
+                    for(int i =0; i < vertexCount;i++)
+                    {
+                        System.out.print((i) +"\t|");
+                        for(int j=0; j < vertexCount;j++)
+                        {
+//                            if(i==0)
+//                            System.out.print((j+1) + "\t|"); // affichage des numéros de lignes pour les colonnes
+//                            else
+                            
+                            System.out.print(getValMatrix()[i][j] + "\t");
+
+                        }
+                        System.out.println();
+                    }
+   
+    }
 
     
     // une matrice des valeurs où là aussi les arcs non existants sont préférablement remplacés par du vide ou des traits
@@ -283,6 +335,9 @@ public final class L3_C5_Graph {
             }
     
     }
+        
+        
+        
     
     // Predecesseurs directs (rang n-1)
      public ArrayList<Integer> getPredecessorsValues(L3_C5_Vertex v)
@@ -326,7 +381,7 @@ public final class L3_C5_Graph {
         {
             System.out.println("Algorithme à utiliser : Dijkstra pour " + this.fileName);
             L3_C5_Dijsktra dijAlg = new L3_C5_Dijsktra(this, startIndex);
-            dijAlg.process();
+            dijAlg.process(false);
             dijAlg.print();
         }
         } catch (Exception e) {

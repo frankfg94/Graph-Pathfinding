@@ -8,7 +8,13 @@ package L3_C5_thgraphes_pathfinding;
 import java.util.ArrayList;
 
 /**
- *
+ * TODO : 
+ * Spacing automatique
+ * Menu
+ * Matrice des valeurs
+ * Matrice d'adjacence : boucles
+ * Rapport
+ * 
  * @author franc
  */
 
@@ -20,9 +26,11 @@ public class L3_C5_Dijsktra
     int[][] dijkstraMatrix; // Utilisé pour l'affichage du tableau de dijkstra
     ArrayList<L3_C5_Vertex> path; // Chemin actuel du sommet initial (précisé dans le constructeur) vers l'index maximal
     ArrayList<L3_C5_Vertex> listeSommets;  // Liste des sommets passée en copie
-    int etape_ID = 0;
+    int etape_ID = 0; // constitue l'index de la ligne du tableau de dijkstra
     L3_C5_Graph g;
     int[] distances;
+    boolean debug = false;
+    boolean stopAlg = false;
     
     /**
      * Le constructeur permet à la fois de lancer de générer et afficher l'algorithme de dijsktra
@@ -38,25 +46,69 @@ public class L3_C5_Dijsktra
             distances[i] = Integer.MAX_VALUE; // On met toutes les distances à +infini
             L3_C5_Vertex.FindVertexWithID(i, g).graphPred = new int[distances.length];
         }
-        distances[0] = 0;
+        distances[startID] = 0;
         this.g = g;
         this.path = new ArrayList<>();
         listeSommets= g.allVertex; 
         
-        
         // Initialisation   
         L3_C5_Vertex premierSommet = L3_C5_Vertex.FindVertexWithID(startID, g);
+        if(premierSommet == null) System.err.println("Le premier sommet n'a pas été trouvé");
+        else System.out.println("premier sommet :" +premierSommet );
         this.path.add(premierSommet);
+    }
+    /**
+     * Vérifie si toutes les arcs de ce graphe possèdent des distances égales
+     * @return Vrai si tous les poids des arcs sont égaux
+     */
+    public boolean allDistEquals()
+    {
+        for (L3_C5_Arc a : this.g.allArcs)
+        {
+            if(a.value != 1)
+                return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Remplit le tableau de Dijkstra avec l'algorithme optimisé pour les longueurs égales
+     */
+    public void equalDistAlg()
+    {          
+        while(etape_ID != g.allVertex.size())
+        {
+            System.out.println("Etape : " + etape_ID);
+          ArrayList<L3_C5_Vertex> sommetsSortants =  path.get(etape_ID).getAllNeighbours(g);
+          int dernierSommetID = path.get(path.size()-1).ID;
+          for(L3_C5_Vertex sommetSortant : sommetsSortants)
+           {
+               if(!path.contains(sommetSortant))
+               {
+                   distances[sommetSortant.ID] = distances[dernierSommetID]+1;
+                   addToPath(sommetSortant);
+               }
+           }
+          
+            updateDijkstraMatrix(etape_ID);
+            etape_ID++;
+        }
         
-
     }
     
     /**
      * Traite l'algorithme de dijkstra
      */
-    void process()
+    void process(boolean  debug)
     {
-        //   System.out.println("Début de la recherche de chemins Dijkstra");
+        if(allDistEquals())
+        {
+            equalDistAlg();
+        }
+        else
+        {
+        this.debug = debug;
+        //  System.out.println("Début de la recherche de chemins Dijkstra");
         while(path.size() != listeSommets.size())
         {
             addVertexMinDist();
@@ -65,6 +117,7 @@ public class L3_C5_Dijsktra
         updateDijkstraMatrix(etape_ID-1);
        // System.out.println("Terminé !");
        // printPath();
+        }      
     }
     
     void addToPath(L3_C5_Vertex sommet)
@@ -78,12 +131,15 @@ public class L3_C5_Dijsktra
     private void addVertexMinDist() 
     {
       // On regarde le dernier sommet du path tous les sommets et on regarde celui avec la plus petite distance DEPUIS LE DEBUT 
-       
+        System.out.println("taille de la liste " + path.size());
+        System.out.println(path);
         // On prend le dernier élement de notre path
       L3_C5_Vertex dernierSommet  =   path.get(path.size()-1);
    //     System.out.println("Dernier sommet : " + dernierSommet.ID);
+   
 
-             ArrayList<L3_C5_Vertex> sommetsSortants =  L3_C5_Vertex.FindVertexWithID(dernierSommet.ID,g).getAllNeighbours(g);
+   
+      ArrayList<L3_C5_Vertex> sommetsSortants =  L3_C5_Vertex.FindVertexWithID(dernierSommet.ID,g).getAllNeighbours(g);
       updateDists(sommetsSortants,dernierSommet);
     }
 
@@ -143,7 +199,9 @@ public class L3_C5_Dijsktra
             if(!path.contains(L3_C5_Vertex.FindVertexWithID(sommet.ID, g)) )
             {
                 // comment recalcule t'on une distance ? on prend la distance du premier sommet jusqu'à celui ci
-                distances[sommet.ID] = distances[dernierSommetChemin.ID] + sommet.getArcComingFrom(dernierSommetChemin.ID).value;
+                int newDist = distances[dernierSommetChemin.ID] + sommet.getArcComingFrom(dernierSommetChemin.ID).value;
+                if( newDist < distances[sommet.ID] )
+                distances[sommet.ID] = newDist;
                 L3_C5_Vertex.FindVertexWithID(sommet.ID, g).graphPred[etape_ID] = dernierSommetChemin.ID;
                 // Une fois qu'on a recalculé et assigné les distances, on peut passer à l'étape suivante
                 // Il faut ajouter le nouveau sommet au path en comparant toutes nos distances
@@ -151,18 +209,26 @@ public class L3_C5_Dijsktra
             }            
         }
         // On ajoute le nouveau sommet avec la distance minimale
-             int sommetMinIndex = getIDMinDist();  
+
+             int sommetMinIndex = getIDMinDist(); 
+             if(sommetMinIndex != Integer.MAX_VALUE)
         addToPath(L3_C5_Vertex.FindVertexWithID(sommetMinIndex, g));
-        //System.out.println("Sommet Ajouté : "+ path.get(path.size()-1));
-        //printDists();
-        //System.out.println("Taille actuelle " + path.size() + "/" + listeSommets.size() );
+             else 
+        addToPath(L3_C5_Vertex.FindVertexWithID(etape_ID+1, g));
+        if(debug) 
+        {
+            System.out.println("Sommet Ajouté : "+ path.get(path.size()-1));
+            printDists(); 
+            System.out.println("Taille actuelle " + path.size() + "/" + listeSommets.size() );
+        }
     }
 
     /**
      * Retourne l'identifiant du sommet avec la distance minimale, et qui est en dehors du path
      * @return 
      */
-    private int getIDMinDist() {
+    private int getIDMinDist() 
+    {
         int minDist = Integer.MAX_VALUE; // +infini
         int ID_Sommet = Integer.MAX_VALUE; // +infini
         for (int i = 0; i < distances.length; i++) {
