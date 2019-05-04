@@ -19,17 +19,24 @@ public class L3_C5_main {
     public static void main(String[] args) 
     {
         
-        new L3_C5_Graph("L3_C5_sampleGraph.txt").printAdjMatrix();
-        new L3_C5_Graph("L3_C5_sampleGraph.txt").printValuesMatrix();
+        
 //       L3_C5_Dijsktra dij = new L3_C5_Dijsktra(, 0);
 //        dij.process(true);
 //        dij.print();
-        //testAllGraphs();
+//        L3_C5_Graph g = new L3_C5_Graph("L3_C5_5.txt");
+//        L3_C5_Dijsktra dij = new L3_C5_Dijsktra(g, 3);
+//        dij.process(false);
+//        dij.print();
+        
+       testAllGraphs();
     }
     
     
     private static void testAllGraphs()
     {
+        L3_C5_Bellman bell = new L3_C5_Bellman(new L3_C5_Graph("L3_C5_slide33.txt"), 0);
+        bell.process();
+        bell.print();
         testGraphs(new String[]{"L3_C5_1.txt","L3_C5_2.txt","L3_C5_3.txt" ,"L3_C5_4.txt","L3_C5_5.txt","L3_C5_6.txt","L3_C5_7.txt","L3_C5_8.txt",
             "L3_C5_9.txt","L3_C5_10.txt","L3_C5_sampleGraph.txt","L3_C5_sampleGraph_1.txt","L3_C5_slide33.txt","L3_C5_slide43.txt"});
     }
@@ -43,7 +50,7 @@ public class L3_C5_main {
     {
         L3_C5_Graph[] graphs = new L3_C5_Graph[graphPaths.length];
         for (int i =0; i< graphPaths.length ;i++) {
-            System.out.print("Initialisation graphe : "  + (i+1) + " " +  graphPaths[i]  +"\t\t...");
+            System.out.print("Initialisation graphe n° "  + (i+1) + " : " +  graphPaths[i]  +"\t\t...");
             try {
                 if(!graphPaths[i].endsWith(".txt"))
                     graphPaths[i] = graphPaths[i]+=".txt";

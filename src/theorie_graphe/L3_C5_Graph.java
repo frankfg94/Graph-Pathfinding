@@ -5,7 +5,6 @@
  */
 package theorie_graphe;
 
-import theorie_graphe.L3_C5_Dijsktra;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -371,6 +370,7 @@ public final class L3_C5_Graph {
     public void testPathfinding(int startIndex)
     {
         try {
+            System.out.println();
                     if(getRecommendedPathAlgorithm() == L3_C5_PathAlgorithm.Bellman)
         {
             System.out.println("Algorithme à utiliser : Bellman pour " + this.fileName);
@@ -383,7 +383,7 @@ public final class L3_C5_Graph {
             System.out.println("Algorithme à utiliser : Dijkstra pour " + this.fileName);
             L3_C5_Dijsktra dijAlg = new L3_C5_Dijsktra(this, startIndex);
             dijAlg.process(false);
-            dijAlg.print();
+            dijAlg.print(true);
         }
         } catch (Exception e) {
             System.out.println("Erreur");

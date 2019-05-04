@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package L3_C5_thgraphes_pathfinding;
+package theorie_graphe;
 
 /**
  *
