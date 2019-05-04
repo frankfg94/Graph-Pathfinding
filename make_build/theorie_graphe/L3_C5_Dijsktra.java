@@ -210,8 +210,10 @@ public class L3_C5_Dijsktra
                   // comment recalcule t'on une distance ? on prend la distance du premier sommet jusqu'à celui ci
                   int newDist = distances[dernierSommetChemin.ID] + sommet.getArcComingFrom(dernierSommetChemin.ID).value;
                         if( newDist < distances[sommet.ID] )
-                        distances[sommet.ID] = newDist;
-                  L3_C5_Vertex.FindVertexWithID(sommet.ID, g).graphPred[etape_ID] = dernierSommetChemin.ID;
+                        {
+                            distances[sommet.ID] = newDist;
+                            L3_C5_Vertex.FindVertexWithID(sommet.ID, g).graphPred[etape_ID] = dernierSommetChemin.ID;
+                        }
                   // Une fois qu'on a recalculé et assigné les distances, on peut passer à l'étape suivante
                   // Il faut ajouter le nouveau sommet au path en comparant toutes nos distances
 

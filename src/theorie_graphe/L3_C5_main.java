@@ -31,10 +31,17 @@ public class L3_C5_main {
 //        dij.print();
         
       // testAllGraphs();
-      L3_C5_Graph g = new L3_C5_Graph("L3_C5_1.txt");
-      ArrayList<Integer> path = find_path_bellman(g,0,3);
-    print_path(path);
-    System.out.println(print_path_graphviz(g,path));
+
+
+
+
+      L3_C5_Graph g = new L3_C5_Graph("L3_C5_slide33.txt");
+      L3_C5_Dijsktra dij = new L3_C5_Dijsktra(g, 0);
+        dij.process(false);
+        dij.print(false);
+
+      /*ArrayList<Integer> path = find_path_bellman(g,0,3);
+    print_path(path);*/
     }
     
     
@@ -85,7 +92,6 @@ public class L3_C5_main {
         bell.process();
         bell.print();
         return bell.get_path(dst);
-
     }
 
     private static void print_path(ArrayList<Integer> lst)
