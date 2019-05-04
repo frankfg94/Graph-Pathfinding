@@ -21,24 +21,7 @@ public class L3_C5_main {
     public static void main(String[] args) 
     {
         
-        
-//       L3_C5_Dijsktra dij = new L3_C5_Dijsktra(, 0);
-//        dij.process(true);
-//        dij.print();
-//        L3_C5_Graph g = new L3_C5_Graph("L3_C5_5.txt");
-//        L3_C5_Dijsktra dij = new L3_C5_Dijsktra(g, 3);
-//        dij.process(false);
-//        dij.print();
-        
-      // testAllGraphs();
-
-
-
-
-      L3_C5_Graph g = new L3_C5_Graph("L3_C5_slide33.txt");
-      L3_C5_Dijsktra dij = new L3_C5_Dijsktra(g, 0);
-        dij.process(false);
-        dij.print(false);
+       testAllGraphs();
 
       /*ArrayList<Integer> path = find_path_bellman(g,0,3);
     print_path(path);*/
@@ -47,11 +30,9 @@ public class L3_C5_main {
     
     private static void testAllGraphs()
     {
-        L3_C5_Bellman bell = new L3_C5_Bellman(new L3_C5_Graph("L3_C5_slide33.txt"), 0);
-        bell.process();
-        bell.print();
+
         testGraphs(new String[]{"L3_C5_1.txt","L3_C5_2.txt","L3_C5_3.txt" ,"L3_C5_4.txt","L3_C5_5.txt","L3_C5_6.txt","L3_C5_7.txt","L3_C5_8.txt",
-            "L3_C5_9.txt","L3_C5_10.txt","L3_C5_sampleGraph.txt","L3_C5_sampleGraph_1.txt","L3_C5_slide33.txt","L3_C5_slide43.txt"});
+        "L3_C5_9.txt","L3_C5_10.txt","L3_C5_sampleGraph.txt","L3_C5_sampleGraph_1.txt","L3_C5_slide33.txt","L3_C5_slide43.txt"});
     }
     
     /**
@@ -80,8 +61,8 @@ public class L3_C5_main {
         
         for (L3_C5_Graph graph : graphs) 
         {
-            
-            graph.testPathfinding(0);
+            for(int sommetID = 0; sommetID < graph.getVertexCount() ; sommetID++)
+            graph.testPathfinding(sommetID);
         }
    
     }
