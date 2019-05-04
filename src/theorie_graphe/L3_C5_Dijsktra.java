@@ -326,10 +326,10 @@ public class L3_C5_Dijsktra
             System.out.println(distText);
         }
         
-        for(int i =0 ; i < distances.length;i++)
+     /*   for(int i =0 ; i < distances.length;i++)
         {
             printPath(get_path(i),i);
-        }
+        }*/
     }
     
     /**
@@ -363,7 +363,7 @@ public class L3_C5_Dijsktra
         } while (etapeStock>0);
         
         Collections.reverse(pathOrder);
-        
+        pathOrder.add(destID);
         return pathOrder;
     }
     
