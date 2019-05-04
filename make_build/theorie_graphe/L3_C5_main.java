@@ -26,7 +26,7 @@ public class L3_C5_main {
     public static void main(String[] args) 
     {
         
-        
+        //testAllGraphs();
        menu();
 
 
@@ -45,11 +45,9 @@ public class L3_C5_main {
     
     private static void testAllGraphs()
     {
-        L3_C5_Bellman bell = new L3_C5_Bellman(new L3_C5_Graph("L3_C5_slide33.txt"), 0);
-        bell.process();
-        bell.print();
+
         testGraphs(new String[]{"L3_C5_1.txt","L3_C5_2.txt","L3_C5_3.txt" ,"L3_C5_4.txt","L3_C5_5.txt","L3_C5_6.txt","L3_C5_7.txt","L3_C5_8.txt",
-            "L3_C5_9.txt","L3_C5_10.txt","L3_C5_sampleGraph.txt","L3_C5_sampleGraph_1.txt","L3_C5_slide33.txt","L3_C5_slide43.txt"});
+        "L3_C5_9.txt","L3_C5_10.txt","L3_C5_sampleGraph.txt","L3_C5_sampleGraph_1.txt","L3_C5_slide33.txt","L3_C5_slide43.txt"});
     }
     
     /**
@@ -78,8 +76,8 @@ public class L3_C5_main {
         
         for (L3_C5_Graph graph : graphs) 
         {
-            
-            graph.testPathfinding(0);
+            for(int sommetID = 0; sommetID < graph.getVertexCount() ; sommetID++)
+            graph.testPathfinding(sommetID);
         }
    
     }
@@ -111,7 +109,7 @@ public class L3_C5_main {
         for(int i = 0; i < g.allArcs.size(); i++)
         {
             L3_C5_Arc a = g.allArcs.get(i);
-            dg += a.initExtremityValue + " -> " + a.termExtremityValue;
+            dg += "    "+a.initExtremityValue + " -> " + a.termExtremityValue;
             dg += "[label=\""+a.value+"\",weight=\""+a.value+"\"";
             for(int j = 0; j < lst.size() - 1; j++)
             {
@@ -188,6 +186,35 @@ public class L3_C5_main {
         L3_C5_Graph g = new L3_C5_Graph(file);
 
         int start = 0;
+
+        Scanner sc = new Scanner(System.in);
+
+        // ### Saisie point de départ
+        Pattern pat = Pattern.compile("^([0-9]{1,4})$");
+        do
+        {
+            System.out.println("Indiquer un sommet de départ:");
+            System.out.println("(entier entre 0 et "+g.getVertexCount()+")");    
+            System.out.print("> ");
+
+            String str = sc.nextLine().trim();
+            if(pat.matcher(str).find())
+            {
+                if(str.charAt(0) == 'n')
+                {
+                    return;
+                }
+                start = Integer.parseInt(str);
+
+                if(start >= 0 && start <= g.getVertexCount())
+                {
+                    break;
+                }
+            }
+            System.out.println("Saisie incorrecte");
+        }while(true);
+
+        // ### Affichage traces
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
@@ -195,23 +222,22 @@ public class L3_C5_main {
 
         g.printAdjMatrix();
         g.printValuesMatrix();
+        g.printIncidenceMatrix();
         g.testPathfinding(start);     
 
         System.out.flush();
         System.setOut(old);
 
+        
         String res = baos.toString();
-
-        System.out.println("=== Affichage des traces ===\n");
+        baos = new ByteArrayOutputStream();
+        ps = new PrintStream(baos);
         System.out.println(res);
-        System.out.println("\n=== Fin affichage traces ===");
 
-        System.out.println("Afficher un chemin partant de "+start+" allant vers un point défini ?");
-        System.out.println("n pour non, Sinon indiquer le sommet (entier entre 0 et "+g.getVertexCount());
 
-        Pattern pat = Pattern.compile("^((n)|([0-9]{1,4}))$");
-        Scanner sc = new Scanner(System.in);
-
+        // ### Saisie affichage chemin
+        pat = Pattern.compile("^((n)|([0-9]{1,4}))$");
+            int val = 0;
         do
         {
             System.out.println("Afficher un chemin partant de "+start+" allant vers un point défini ?");
@@ -219,7 +245,6 @@ public class L3_C5_main {
             System.out.print("> ");
 
             String str = sc.nextLine().trim();
-            int val = 0;
             if(pat.matcher(str).find())
             {
                 if(str.charAt(0) == 'n')
@@ -236,9 +261,40 @@ public class L3_C5_main {
             System.out.println("Saisie incorrecte");
         }while(true);
 
-        print_path(g.get_pass(0));
+        // ### Affichage chemin
+        old = System.out;
+        System.setOut(ps);
 
+        System.out.println("Chemin trouvé: ");
+        ArrayList<Integer> path = g.get_path(val);
+        print_path(path);
 
+        System.setOut(old);
+        res = baos.toString();
+
+        System.out.println(res);
+
+        // ### Saisie Graphviz
+        do{
+            System.out.println("Afficher une version graphviz du graphe avec le chemin trouvé ?");
+            System.out.println("Utilisable avec le logiciel graphviz ou directement en ligne sur http://www.webgraphviz.com/");
+            System.out.print("[y/n]\n> ");
+            String str = sc.nextLine().trim();
+            
+            if(str.charAt(0) == 'n')
+                return;
+            else
+            {
+                break;
+            }
+        }while(true);
+
+        // ### Affichage graphviz
+
+        String gpz = print_path_graphviz(g, path);
+        System.out.println("======================");
+        System.out.print(gpz);
+        System.out.println("======================");
 
     }
 

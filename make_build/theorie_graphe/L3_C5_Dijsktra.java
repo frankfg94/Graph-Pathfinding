@@ -6,6 +6,7 @@
 package theorie_graphe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * TODO : 
@@ -29,7 +30,6 @@ public class L3_C5_Dijsktra
     L3_C5_Graph g; // le graphe sur lequel va être effectué l'algorithme de dijkstra
     int[] distances; // contient les distances pour chaque sommet depuis le sommet initial
     boolean debug = false; // permet d'activer l'affichage détaillé pour voir comment se déroule l'algorithme
-    
     /**
      * Le constructeur permet à la fois de lancer de générer et afficher l'algorithme de dijsktra
      * @param g le graphe sur lequel effectuer l'algorithme
@@ -45,6 +45,7 @@ public class L3_C5_Dijsktra
             L3_C5_Vertex.FindVertexWithID(i, g).graphPred = new int[distances.length];
         }
         distances[startID] = 0;
+        L3_C5_Vertex.FindVertexWithID(startID, g).graphPred[0]  = startID;
         this.g = g;
         this.path = new ArrayList<>();
         listeSommets= g.allVertex; 
@@ -60,6 +61,7 @@ public class L3_C5_Dijsktra
      */
     public boolean allDistEquals()
     {
+        System.out.println("Les distances sont égales ! ");
         int firstDist = this.g.allArcs.get(0).value;
         for (L3_C5_Arc a : this.g.allArcs)
         {
@@ -216,7 +218,6 @@ public class L3_C5_Dijsktra
                         }
                   // Une fois qu'on a recalculé et assigné les distances, on peut passer à l'étape suivante
                   // Il faut ajouter le nouveau sommet au path en comparant toutes nos distances
-
               }            
           }
         }
@@ -227,7 +228,7 @@ public class L3_C5_Dijsktra
              if(sommetMinIndex != Integer.MAX_VALUE)
         addToPath(L3_C5_Vertex.FindVertexWithID(sommetMinIndex, g));
              else 
-        addToPath(L3_C5_Vertex.FindVertexWithID(etape_ID+1, g));  
+        addToPath(L3_C5_Vertex.FindVertexWithID(minNotAddedVertexID(), g));  
              updateDijkstraMatrix(etape_ID);
 
                 if(debug) 
@@ -294,7 +295,7 @@ public class L3_C5_Dijsktra
         for (int i = 0; i < listeSommets.size(); i++) { // Lignes qui rpz les etapes
             System.out.print(getCC(i) + "\t|");
             for (int j = 0; j <  listeSommets.size(); j++) { // Colonnes qui representent les sommets
-                if(dijkstraMatrix[i][j] !=Integer.MAX_VALUE)
+                if(dijkstraMatrix[i][j] !=Integer.MAX_VALUE && distances[j] >= 0)
                     System.out.print( dijkstraMatrix[i][j] +"("+ L3_C5_Vertex.FindVertexWithID(j, g).graphPred[i] + ")" );
                 else 
                     System.out.print(/*"∞"*/ "+"); // on peut afficher le symbole infini mais par sécurité, on affiche le symbole + à la place
@@ -314,10 +315,10 @@ public class L3_C5_Dijsktra
                     if(i == etape_ID)
                     {
                         vertexText+=" " + j;
-                        if(distances[j] == Integer.MAX_VALUE)
+                        if(distances[j] == Integer.MAX_VALUE || distances[j] < 0)
                             distText+=" +";
                         else
-                            distText+=" "+ distances[j] + "("+ L3_C5_Vertex.FindVertexWithID(j, g).graphPred[etape_ID] + ")";
+                            distText+=" "+ distances[j];
                     }
                 }
             }
@@ -325,8 +326,10 @@ public class L3_C5_Dijsktra
             System.out.println(distText);
         }
         
-//        for(int i =0 ; i < distances.length;i++)
-//            printPaths(i);
+        for(int i =0 ; i < distances.length;i++)
+        {
+            printPath(get_path(i),i);
+        }
     }
     
     /**
@@ -339,19 +342,62 @@ public class L3_C5_Dijsktra
             } 
     }
 
-    private void printPaths(int destID) 
+    public ArrayList<Integer> get_path(int destID)
     {
+        if(distances[destID] == Integer.MAX_VALUE) return null;
+        ArrayList<Integer> pathOrder = new ArrayList<>(); // Le chemin dijkstra
         int etapeStock = etape_ID;
-        System.out.println("Pour arriver au sommet :" +destID + "en essayant dans le sens inverse");
-        int pred = -1;
-        do {            
-            if(etapeStock  == etape_ID) 
+        int pred = -1; // predecesseur
+        int predAnterieur = -1; // predecesseur du predecesseur
+        do { 
+            if(pred!=-1)
+            {
+               predAnterieur =  L3_C5_Vertex.FindVertexWithID(pred, g).graphPred[etapeStock]; 
+            if(pred == destID || pred ==predAnterieur ) break;
+            }
+            if(etapeStock  == etape_ID ) 
                      pred  =L3_C5_Vertex.FindVertexWithID(destID, g).graphPred[etapeStock] ;
-            else pred = L3_C5_Vertex.FindVertexWithID(pred, g).graphPred[etapeStock] ;
-        System.out.println("On part de : " + destID + " on arrive à :"  +  pred);
-       etapeStock--;
+            else pred = predAnterieur ;
+            pathOrder.add(pred);
+       etapeStock--; // on remonte donc on decremente les predecesseurs
         } while (etapeStock>0);
+        
+        Collections.reverse(pathOrder);
+        
+        return pathOrder;
+    }
+    
+    public void printPath(ArrayList<Integer> foundPath, int dest) 
+    {
+       if(foundPath == null || this.path.get(0).ID != foundPath.get(0))
+       {
+                       System.out.println("[X] Impossible de calculer un chemin de  " +  this.path.get(0).ID + " jusqu'à " + dest+ " (Distance infinie)");
+                       return;
+       }
+       System.out.print("En partant du sommet (" + path.get(0).ID  + ") on peut arriver à (" +dest+ ") grâce au chemin : " );
+        for(int sommetID : foundPath)
+        {
+            if(foundPath.size() != 1 && sommetID != foundPath.get(foundPath.size()-1))
+            System.out.print(sommetID + " => ");
+            else 
+                System.out.print(sommetID + " ");
+        }
+        System.out.println();
 
+    }
+
+    int minNotAddedID = -1;
+    private int minNotAddedVertexID() 
+    {
+        for(L3_C5_Vertex v : g.allVertex)
+        {
+            if(!path.contains(v))
+            {
+                if(minNotAddedID < v.ID)
+                    minNotAddedID = v.ID;
+            }
+        }
+        return minNotAddedID;
     }
 
 }

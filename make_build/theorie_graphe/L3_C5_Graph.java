@@ -387,13 +387,17 @@ public final class L3_C5_Graph {
             bellAlg =  new L3_C5_Bellman(this, startIndex);
             bellAlg.process();
             bellAlg.print();
+           
         }
         else
         {
             System.out.println("Algorithme à utiliser : Dijkstra pour " + this.fileName);
             dijAlg = new L3_C5_Dijsktra(this, startIndex);
             dijAlg.process(false);
-            dijAlg.print(true);
+            dijAlg.print(false);
+            
+             
+
         }
         } catch (Exception e) {
             System.out.println("Erreur");
@@ -401,7 +405,7 @@ public final class L3_C5_Graph {
 
     }
 
-    public ArrayList<Integer> get_pass(int dst)
+    public ArrayList<Integer> get_path(int dst)
     {
         if(bellAlg == null && dijAlg == null)
         {
@@ -410,8 +414,7 @@ public final class L3_C5_Graph {
         }
         if(dijAlg != null)
         {
-            // FIXME
-            return null;
+            return dijAlg.get_path(dst);
         }
         else
         {

@@ -30,7 +30,6 @@ public class L3_C5_Dijsktra
     L3_C5_Graph g; // le graphe sur lequel va être effectué l'algorithme de dijkstra
     int[] distances; // contient les distances pour chaque sommet depuis le sommet initial
     boolean debug = false; // permet d'activer l'affichage détaillé pour voir comment se déroule l'algorithme
-    
     /**
      * Le constructeur permet à la fois de lancer de générer et afficher l'algorithme de dijsktra
      * @param g le graphe sur lequel effectuer l'algorithme

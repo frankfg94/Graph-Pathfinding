@@ -14,7 +14,7 @@ import java.util.HashSet;
  */
 
 
-public class L3_C5_Vertex // Sommet
+ public class L3_C5_Vertex // Sommet
 {
     // désigne les successeurs et prédécesseurs
     public ArrayList<L3_C5_Arc> arcs = new ArrayList<>();
