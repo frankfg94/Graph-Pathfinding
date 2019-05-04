@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  *
  * @author franc
@@ -48,7 +49,15 @@ public final class L3_C5_Graph {
    
     private int[][] valMatrix;
     
+    // Algo choisi
+    private L3_C5_PathAlgorithm algo = null;
     
+    // Algo bellman
+    private L3_C5_Bellman bellAlg = null;
+
+    // Algo dijkstra
+    private L3_C5_Dijsktra dijAlg = null;
+
     public int[][] getValMatrix()
     {
         return valMatrix;
@@ -371,22 +380,42 @@ public final class L3_C5_Graph {
     {
         try {
             System.out.println();
-                    if(getRecommendedPathAlgorithm() == L3_C5_PathAlgorithm.Bellman)
+            algo = getRecommendedPathAlgorithm();
+            if(algo == L3_C5_PathAlgorithm.Bellman)
         {
             System.out.println("Algorithme à utiliser : Bellman pour " + this.fileName);
-            L3_C5_Bellman bellAlg =  new L3_C5_Bellman(this, startIndex);
+            bellAlg =  new L3_C5_Bellman(this, startIndex);
             bellAlg.process();
             bellAlg.print();
         }
         else
         {
             System.out.println("Algorithme à utiliser : Dijkstra pour " + this.fileName);
-            L3_C5_Dijsktra dijAlg = new L3_C5_Dijsktra(this, startIndex);
+            dijAlg = new L3_C5_Dijsktra(this, startIndex);
             dijAlg.process(false);
             dijAlg.print(true);
         }
         } catch (Exception e) {
             System.out.println("Erreur");
+        }
+
+    }
+
+    public ArrayList<Integer> get_pass(int dst)
+    {
+        if(bellAlg == null && dijAlg == null)
+        {
+            System.out.println("Aucun algo n'a été executé");
+            return null;
+        }
+        if(dijAlg != null)
+        {
+            // FIXME
+            return null;
+        }
+        else
+        {
+            return bellAlg.get_path(dst);
         }
 
     }
