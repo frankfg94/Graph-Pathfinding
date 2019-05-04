@@ -329,7 +329,7 @@ public class L3_C5_Dijsktra
         
         for(int i =0 ; i < distances.length;i++)
         {
-            printPath(getPath(i),i);
+            printPath(get_path(i),i);
         }
     }
     
@@ -343,12 +343,11 @@ public class L3_C5_Dijsktra
             } 
     }
 
-    public ArrayList<Integer> getPath(int destID)
+    public ArrayList<Integer> get_path(int destID)
     {
         if(distances[destID] == Integer.MAX_VALUE) return null;
         ArrayList<Integer> pathOrder = new ArrayList<>(); // Le chemin dijkstra
         int etapeStock = etape_ID;
-        System.out.print("En partant du sommet (" + path.get(0).ID  + ") on peut arriver à (" +destID+ ") grâce au chemin : " );
         int pred = -1; // predecesseur
         int predAnterieur = -1; // predecesseur du predecesseur
         do { 
@@ -369,17 +368,17 @@ public class L3_C5_Dijsktra
         return pathOrder;
     }
     
-    public void printPath(ArrayList<Integer> path, int dest) 
+    public void printPath(ArrayList<Integer> foundPath, int dest) 
     {
-       if(path == null)
+       if(foundPath == null || this.path.get(0).ID != foundPath.get(0))
        {
                        System.out.println("[X] Impossible de calculer un chemin de  " +  this.path.get(0).ID + " jusqu'à " + dest+ " (Distance infinie)");
                        return;
        }
-        
-        for(int sommetID : path)
+       System.out.print("En partant du sommet (" + path.get(0).ID  + ") on peut arriver à (" +dest+ ") grâce au chemin : " );
+        for(int sommetID : foundPath)
         {
-            if(path.size() != 1 && sommetID != path.get(path.size()-1))
+            if(foundPath.size() != 1 && sommetID != foundPath.get(foundPath.size()-1))
             System.out.print(sommetID + " => ");
             else 
                 System.out.print(sommetID + " ");
