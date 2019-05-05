@@ -311,7 +311,7 @@ public class L3_C5_main {
         old = System.out;
         System.setOut(ps);
 
-        System.out.println("Chemin trouvé: ");
+        System.out.println("Chemin trouvé de "+start+" à "+val+": ");
         ArrayList<Integer> path = g.get_path(val);
         print_path(path);
 
