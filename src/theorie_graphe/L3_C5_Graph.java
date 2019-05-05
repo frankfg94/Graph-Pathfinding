@@ -39,7 +39,7 @@ public final class L3_C5_Graph {
     public ArrayList<L3_C5_Vertex> allVertex = new ArrayList<>();
     
     // Le fichier qui permet de charger le graphe 
-    private String fileName;   
+    public String fileName;   
     
     // matrice d'adjacence 
     private  boolean[][] adjMatrix;
@@ -404,6 +404,7 @@ public final class L3_C5_Graph {
         }
         } catch (Exception e) {
             System.out.println("Erreur");
+            e.printStackTrace();
         }
 
     }

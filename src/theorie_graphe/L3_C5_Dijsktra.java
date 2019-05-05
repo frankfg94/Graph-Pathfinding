@@ -7,7 +7,8 @@ package theorie_graphe;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
+import java.io.PrintStream;
+import java.util.logging.Logger;
 /**
  * TODO : 
  * Spacing automatique
@@ -30,6 +31,7 @@ public class L3_C5_Dijsktra
     L3_C5_Graph g; // le graphe sur lequel va être effectué l'algorithme de dijkstra
     int[] distances; // contient les distances pour chaque sommet depuis le sommet initial
     boolean debug = false; // permet d'activer l'affichage détaillé pour voir comment se déroule l'algorithme
+    int maxSpaces = 0; // Tabulations pour adapter la taille du tableau
     
     /**
      * Le constructeur permet à la fois de lancer de générer et afficher l'algorithme de dijsktra
@@ -62,13 +64,13 @@ public class L3_C5_Dijsktra
      */
     public boolean allDistEquals()
     {
-        System.out.println("Les distances sont égales ! ");
         int firstDist = this.g.allArcs.get(0).value;
         for (L3_C5_Arc a : this.g.allArcs)
         {
             if(a.value != firstDist)
                 return false;
         }
+        System.out.println("Les distances sont égales ! ");
         return true;
     }
     
@@ -81,12 +83,13 @@ public class L3_C5_Dijsktra
         {
             System.out.println("Etape : " + etape_ID);
           ArrayList<L3_C5_Vertex> sommetsSortants =  path.get(etape_ID).getAllNeighbours(g);
-          int dernierSommetID = path.get(path.size()-1).ID;
+          int dernierSommetCheminID = path.get(path.size()-1).ID;
           for(L3_C5_Vertex sommetSortant : sommetsSortants)
            {
                if(!path.contains(sommetSortant))
                {
-                   distances[sommetSortant.ID] = distances[dernierSommetID]+1;
+                   distances[sommetSortant.ID] = distances[dernierSommetCheminID]+1;
+                   sommetSortant.graphPred[etape_ID] = dernierSommetCheminID ;
                    addToPath(sommetSortant);
                }
            }
@@ -186,6 +189,7 @@ public class L3_C5_Dijsktra
                             code += Integer.toString(path.get(i).ID);
 
             } catch (Exception e) {
+                  System.err.println(e);
                 code = "Erreur";
             }
         }
@@ -261,6 +265,13 @@ public class L3_C5_Dijsktra
         return ID_Sommet;
     }
     
+    private void doSpacing(int count)
+    {
+        if(count>0)
+            System.out.printf("%"+count+"s"," ");
+    }
+    
+    
     /**
      * Affiche le tableau avec une colonne CC ainsi que la liste des identifiants de sommets en argument, pour l'instant le sommet initial est d'index 0
      * et le sommet final est d'index proposé
@@ -268,6 +279,7 @@ public class L3_C5_Dijsktra
      */
     public void print(boolean showPaths)
     {
+        System.out.println("Spacing : " + maxSpaces);
         // Correction des predecesseurs dans le graphe
         for(int i =0 ; i < distances.length ;i++)
         {
@@ -279,11 +291,18 @@ public class L3_C5_Dijsktra
         }
         
         // Affichage de la premiere ligne du tableau
+        maxSpaces = listeSommets.size();
         for (int i = 0; i < listeSommets.size(); i++) {
             if(i==0)
-                System.out.print("ORDRE");
-            System.out.print("\t|"+ i);
+            {
+                String titreCC = "ORDRE";
+                                System.out.print(titreCC);
+                                doSpacing(maxSpaces - titreCC.length());
+            }
+
+            System.out.printf("%9s", "|"+ i);
         }
+        maxSpaces =0;
         
         // Ligne de séparation
         System.out.println();
@@ -294,13 +313,22 @@ public class L3_C5_Dijsktra
         // Affichage du tableau
         System.out.println();
         for (int i = 0; i < listeSommets.size(); i++) { // Lignes qui rpz les etapes
-            System.out.print(getCC(i) + "\t|");
-            for (int j = 0; j <  listeSommets.size(); j++) { // Colonnes qui representent les sommets
-                if(dijkstraMatrix[i][j] !=Integer.MAX_VALUE && distances[j] >= 0)
-                    System.out.print( dijkstraMatrix[i][j] +"("+ L3_C5_Vertex.FindVertexWithID(j, g).graphPred[i] + ")" );
-                else 
-                    System.out.print(/*"∞"*/ "+"); // on peut afficher le symbole infini mais par sécurité, on affiche le symbole + à la place
-                System.out.print("\t");
+            System.out.print(getCC(i));
+            int charCount = 0;
+            for(char c : getCC(i).toCharArray())
+            {
+                    charCount++;
+            }
+
+            doSpacing(listeSommets.size()-charCount);
+
+            
+                for (int j = 0; j <  listeSommets.size(); j++) { // Colonnes qui representent les sommets
+                    if(dijkstraMatrix[i][j] !=Integer.MAX_VALUE && distances[j] >= 0)
+                        System.out.printf("%7s", dijkstraMatrix[i][j] +"("+ L3_C5_Vertex.FindVertexWithID(j, g).graphPred[i] + ")" );
+                    else 
+                        System.out.printf("%7s",/*"∞"*/ "+"); // on peut afficher le symbole infini mais par sécurité, on affiche le symbole + à la place
+                    doSpacing(2); // Ecart entre les cases
             }
             System.out.println();
         }
@@ -357,14 +385,15 @@ public class L3_C5_Dijsktra
             if(pred == destID || pred ==predAnterieur ) break;
             }
             if(etapeStock  == etape_ID ) 
-                     pred  =L3_C5_Vertex.FindVertexWithID(destID, g).graphPred[etapeStock] ;
+            {
+                pred = L3_C5_Vertex.FindVertexWithID(destID, g).graphPred[etapeStock];               
+            }
             else pred = predAnterieur ;
             pathOrder.add(pred);
        etapeStock--; // on remonte donc on decremente les predecesseurs
         } while (etapeStock>0);
-        
         Collections.reverse(pathOrder);
-        
+        pathOrder.add(destID);
         return pathOrder;
     }
     
