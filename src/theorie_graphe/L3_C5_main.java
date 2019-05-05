@@ -27,8 +27,8 @@ public class L3_C5_main {
     public static void main(String[] args) 
     {
         
-        //testAllGraphs();
-        while(menu());
+        testAllGraphs();
+        //while(menu());
        
     }
     

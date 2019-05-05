@@ -238,18 +238,18 @@ public class L3_C5_Bellman
     {
         for(int i = 0; i < vcount + 1; i++)
         {
-            System.out.printf("+-------");
+            System.out.printf("+--------");
         }
         System.out.printf("+\n");
-        System.out.printf("|  k    ");
+        System.out.printf("|  k     ");
         for(int i = 0; i < vcount; i++)
         {
-            System.out.printf("| %2d    ",i);
+            System.out.printf("| %3d    ",i);
         }
         System.out.printf("|\n");
         for(int i = 0; i < vcount + 1; i++)
         {
-            System.out.printf("+-------");
+            System.out.printf("+--------");
         }
         System.out.printf("+\n");
         
@@ -258,17 +258,17 @@ public class L3_C5_Bellman
         {
             if(bellman_array.get(i) == null)
                 continue;
-            System.out.printf("| %2d    ", i - 1);
+            System.out.printf("| %3d    ", i - 1);
             
             for(int j = 0; j < bellman_array.get(i).size(); j++)
             {
                 if(bellman_array.get(i).get(j).sommets.isEmpty())
                 {
-                    System.out.printf("|  +    ");
+                    System.out.printf("|   +    ");
                 }
                 else if(bellman_array.get(i).get(j).sommets.size() == 1)
                 {
-                    System.out.printf("| %2d(%2d)",bellman_array.get(i).get(j).poid,bellman_array.get(i).get(j).sommets.get(0));
+                    System.out.printf("| %3d(%2d)",bellman_array.get(i).get(j).poid,bellman_array.get(i).get(j).sommets.get(0));
                 }
                 else
                 {
@@ -288,7 +288,7 @@ public class L3_C5_Bellman
                         letter = lst_more.size();
                         lst_more.add(bellman_array.get(i).get(j).sommets);
                     }
-                    System.out.printf("| %2d( %c)",bellman_array.get(i).get(j).poid,'A'+ letter);
+                    System.out.printf("| %3d( %c)",bellman_array.get(i).get(j).poid,'A'+ letter);
                 }
             }
             
@@ -296,7 +296,7 @@ public class L3_C5_Bellman
             
             for(int j = 0; j < vcount + 1; j++)
             {
-                System.out.printf("+-------");
+                System.out.printf("+--------");
             }
             System.out.printf("+\n");
             
