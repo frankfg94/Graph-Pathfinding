@@ -391,16 +391,13 @@ public final class L3_C5_Graph {
         }
         else
         {
-            System.out.println("1) Algorithme à utiliser : Dijkstra pour " + this.fileName);
-            L3_C5_Dijsktra dijAlg = new L3_C5_Dijsktra(this, startIndex);
+            System.out.println("Algorithme à utiliser : Dijkstra pour " + this.fileName);
+            dijAlg = new L3_C5_Dijsktra(this, startIndex);
             dijAlg.process(false);
-            dijAlg.print(true);
+            dijAlg.print(false);
             
              
-            System.out.println("2) Algorithme à utiliser : Bellman pour " + this.fileName);
-            L3_C5_Bellman bellAlg =  new L3_C5_Bellman(this, startIndex);
-            bellAlg.process();
-            bellAlg.print();
+
         }
         } catch (Exception e) {
             System.out.println("Erreur");

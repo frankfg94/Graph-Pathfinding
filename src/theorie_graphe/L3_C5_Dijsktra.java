@@ -355,10 +355,10 @@ public class L3_C5_Dijsktra
             System.out.println(distText);
         }
         
-        for(int i =0 ; i < distances.length;i++)
+     /*   for(int i =0 ; i < distances.length;i++)
         {
             printPath(get_path(i),i);
-        }
+        }*/
     }
     
     /**
