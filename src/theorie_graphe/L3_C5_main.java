@@ -27,12 +27,14 @@ public class L3_C5_main {
     public static void main(String[] args) 
     {
         
-        testAllGraphs();
-        //while(menu());
+        //testAllGraphs();
+        while(menu());
        
     }
     
-    
+    /**
+     *  Test tous les graphs trouvés (debug)
+     */
     private static void testAllGraphs()
     {
         ArrayList<String> files_graphs = find_files(".");
@@ -75,7 +77,10 @@ public class L3_C5_main {
     }
 
  
-
+    /**
+     * affiche un chemin 
+     * @param lst Tableau contenant la liste des chemins
+     */
     private static void print_path(ArrayList<Integer> lst)
     {
         if(lst == null)
@@ -92,6 +97,12 @@ public class L3_C5_main {
         System.out.println("");
     }
 
+    /**
+     * Affiche le graphe au format graphviz
+     * @param g  le graphe
+     * @param lst le chemin trouvé
+     * @return string contenant le résultat
+     */
     private static String print_path_graphviz(L3_C5_Graph g,ArrayList<Integer> lst)
     {
         if(lst == null)
@@ -117,7 +128,11 @@ public class L3_C5_main {
         return dg;
     }
 
-
+    /**
+     * Trouve tous les fichiers de graphe
+     * @param PATH là ou chercher
+     * @return une liste de fichiers
+     */
     private static ArrayList<String> find_files(String PATH)
     {
         File folder = new File(PATH);
@@ -136,6 +151,10 @@ public class L3_C5_main {
 
     }
 
+    /**
+     * Menu 
+     * @return faux si l'utilisateur a demandé l'arret
+     */
     private static boolean menu()
     {
         Scanner sc = new Scanner(System.in);
