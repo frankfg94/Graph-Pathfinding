@@ -193,7 +193,7 @@ public final class L3_C5_Graph {
    // A rendre compatible avec les boucles
     void printAdjMatrix()
     {
-        System.out.println("Affichage de la matrice d'adjacence");
+        System.out.println("=== Affichage de la matrice d'adjacence ===");
         System.out.println("Nombre de sommets : "+vertexCount);
         System.out.println("Nombre d'arcs     : "+allArcs.size());
         // si la matrice d'adjacence n'a pas encore été créee on le fait maintenant
@@ -214,20 +214,20 @@ public final class L3_C5_Graph {
             }
         }        
         }
-                    System.out.print("\t");
+                    System.out.print("    ");
                     for(int i = 0; i < vertexCount;i++)
-                        System.out.print(" " + i+"\t");
-                    System.out.print("\td+"+System.lineSeparator());
+                        System.out.printf(" %4d",i);
+                    System.out.println("    d+");
+                    for(int i = 0; i < vertexCount + 2; i++)
+                        System.out.print("-----");
+                    System.out.println();
                     for(int i =0; i < vertexCount;i++)
                     {
-                        System.out.print((i) +"\t|");
+                        System.out.printf("%4d|",i);
                         int lineSum = 0;
                         for(int j=0; j < vertexCount;j++)
                         {
-//                            if(i==0)
-//                            System.out.print((j+1) + "\t|"); // affichage des numéros de lignes pour les colonnes
-//                            else
-                            
+  
                             String cellDisplay;
                             if(!getAdjMatrix()[i][j]) cellDisplay="-";
                             else 
@@ -236,30 +236,30 @@ public final class L3_C5_Graph {
                                 lineSum++;
                             }
                               
-                        System.out.print( cellDisplay + "\t|");
+                        System.out.printf("%4s|",cellDisplay);
                          if(j==vertexCount-1)
-                                System.out.print("\t"+lineSum);
+                                System.out.printf("%4d", lineSum);
 
                         }
                         System.out.println();
                     }
-       String finalLine = "d-";
+        System.out.printf("  d-|");
         for (int i = 0; i < vertexCount; i++) {
                     int columnSum = 0;
               for (int j = 0; j < vertexCount; j++) {
                 if(getAdjMatrix()[j][i]) columnSum++;
                 if(j==vertexCount-1)
-                    finalLine+="\t|"+columnSum;
+                    System.out.printf("%4d|",columnSum);
             }
         }
-        System.out.println(finalLine);
+        System.out.println();
     }
     
     
  
     void printValuesMatrix()
     {
-        System.out.println("Affichage de la matrice des valeurs");
+        System.out.println("=== Affichage de la matrice des valeurs ===");
         System.out.println("Nombre de sommets : "+vertexCount);
         System.out.println("Nombre d'arcs     : "+allArcs.size());
         // si la matrice d'adjacence n'a pas encore été créee on le fait maintenant
@@ -280,20 +280,20 @@ public final class L3_C5_Graph {
             }
         }        
         }
-                    System.out.print("\t");
+                    System.out.print("    ");
                     for(int i = 0; i < vertexCount;i++)
-                        System.out.print(" " + i+"\t");
-                    System.out.print("\t"+System.lineSeparator());
+                        System.out.printf(" %4d", i);
+                    System.out.println();
+                    for(int i = 0; i < vertexCount + 1;i++)
+                        System.out.print("-----");
+                    System.out.println();
                     for(int i =0; i < vertexCount;i++)
                     {
-                        System.out.print((i) +"\t|");
+                        System.out.printf("%4d|",i);
                         for(int j=0; j < vertexCount;j++)
                         {
-//                            if(i==0)
-//                            System.out.print((j+1) + "\t|"); // affichage des numéros de lignes pour les colonnes
-//                            else
-                            
-                            System.out.print(getValMatrix()[i][j] + "\t");
+
+                            System.out.printf("%4d|",getValMatrix()[i][j]);
 
                         }
                         System.out.println();
@@ -305,7 +305,7 @@ public final class L3_C5_Graph {
     // une matrice des valeurs où là aussi les arcs non existants sont préférablement remplacés par du vide ou des traits
         void printIncidenceMatrix()
     {
-          System.out.println("Affichage de la matrice d'incidence");
+          System.out.println("=== Affichage de la matrice d'incidence ===");
           System.out.println("Nombre de sommets : "+vertexCount);
           System.out.println("Nombre d'arcs     : "+allArcs.size());
         // si la matrice d'adjacence n'a pas encore été créee on le fait maintenant
@@ -331,15 +331,23 @@ public final class L3_C5_Graph {
         
         // AFFICHAGE DU TABLEAU
         
-                    System.out.print("\t");
+                    System.out.printf("i:  ");
                     for(int i = 0; i < allArcs.size();i++)
-                        System.out.print(" " +i+"("+ + allArcs.get(i).value+")\t");
-                    System.out.print("\t"+System.lineSeparator());
+                        System.out.printf(" %4d",i);
+                    System.out.println();
+                    System.out.printf("p:  ");
+                    for(int i = 0; i < allArcs.size();i++)
+                        System.out.printf(" %4d",allArcs.get(i).value);
+                    System.out.println();
+                    System.out.printf("-----");
+                    for(int i = 0; i < allArcs.size();i++)
+                        System.out.printf("-----");
+                    System.out.println();                    
              for(int vertIndex = 0; vertIndex < vertexCount ; vertIndex++)
             {
-                System.out.print((vertIndex) +"\t|");
+                System.out.printf("%4d|",vertIndex);
                 for(int arcIndex = 0; arcIndex < allArcs.size(); arcIndex++)
-                      System.out.print(   incidenceMatrix[vertIndex][arcIndex]+"\t");
+                      System.out.printf("%4d|",incidenceMatrix[vertIndex][arcIndex]);
                 System.out.println();
             }
     

@@ -302,7 +302,7 @@ public class L3_C5_Dijsktra
 
             System.out.printf("%9s", "|"+ i);
         }
-        maxSpaces =0;
+        //maxSpaces =0;
         
         // Ligne de séparation
         System.out.println();

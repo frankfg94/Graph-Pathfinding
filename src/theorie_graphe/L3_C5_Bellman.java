@@ -54,6 +54,10 @@ public class L3_C5_Bellman
         return nkline;
     }
     
+    /**
+     * Affiche une ligne de tableau (debug)
+     * @param l la ligne de tableau
+     */
     private void print_kline(k_line l)
     {
         if(l == null)
@@ -82,6 +86,12 @@ public class L3_C5_Bellman
         {}  
     }
     
+    /**
+     * Compare deux lignes de tableau
+     * @param a tableau 1
+     * @param b tableau 2
+     * @return faux si différent
+     */
     private boolean cmp_kline(k_line a, k_line b)
     {
         if(a == null || b == null)
@@ -112,7 +122,11 @@ public class L3_C5_Bellman
     }
     
 
-    
+    /**
+     * Copie une ligne de tableau
+     * @param a la ligne à copier
+     * @return le nouveau tableau
+     */
     private k_line cp_kline(k_line a)
     {
         k_line nkline = new k_line();
@@ -135,6 +149,7 @@ public class L3_C5_Bellman
     //l'ID du sommer de départ
     int start = 0;
     int vcount = 0;
+    // contient un cycle absorbant
     boolean cycle = false;
     //Double ArrayList (tableau de bellman)
     ArrayList<k_line> bellman_array = new ArrayList<>();
@@ -216,6 +231,9 @@ public class L3_C5_Bellman
         bellman_array.add(b);
     }
     
+    /**
+     *  Affiche le tableau
+     */
     public void print()
     {
         for(int i = 0; i < vcount + 1; i++)
@@ -296,7 +314,11 @@ public class L3_C5_Bellman
     }
     
 
-    
+    /**
+     * Retourne la liste des successeur d'une liste de sommet
+     * @param somm
+     * @return
+     */
     private ArrayList<L3_C5_Arc> get_succ(ArrayList<Integer> somm)
     {
         ArrayList<L3_C5_Arc> arcs = new ArrayList<>();
@@ -308,6 +330,12 @@ public class L3_C5_Bellman
         return arcs;
     }
     
+    /**
+     * Retourne un chemin allant du sommet de départ indiqué lors de la construction
+     * de l'objet vers une destination
+     * @param dest
+     * @return
+     */
     public ArrayList<Integer> get_path(int dest)
     {
         if(cycle)

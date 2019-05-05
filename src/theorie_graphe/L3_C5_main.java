@@ -30,25 +30,14 @@ public class L3_C5_main {
         //testAllGraphs();
         while(menu());
        
-
-
-/*
-
-      L3_C5_Graph g = new L3_C5_Graph("L3_C5_slide33.txt");
-      L3_C5_Dijsktra dij = new L3_C5_Dijsktra(g, 0);
-       /* dij.process(false);
-        dij.print(false);
-
-    ArrayList<Integer> path = find_path_bellman(g,0,3);
-    print_path(path);
-    System.out.println(print_path_graphviz(g, path));*/
     }
     
     
     private static void testAllGraphs()
     {
- testGraphs(new String[]{"L3_C5_1.txt","L3_C5_2.txt","L3_C5_3.txt" ,"L3_C5_4.txt","L3_C5_5.txt","L3_C5_6.txt","L3_C5_7.txt","L3_C5_8.txt",
-        "L3_C5_9.txt","L3_C5_10.txt","L3_C5_sampleGraph.txt","L3_C5_sampleGraph_1.txt","L3_C5_slide33.txt","L3_C5_slide43.txt"});
+        ArrayList<String> files_graphs = find_files(".");
+        testGraphs(files_graphs);
+
     }
     
     /**
@@ -56,15 +45,14 @@ public class L3_C5_main {
      * Le choix de Bellman ou Dijkstra est fait automatiquement
      * @param graphPaths  L'ensemble des chemins des graphes à analyser
      */
-    private static void testGraphs(String[] graphPaths)
+    private static void testGraphs(ArrayList<String> graphPaths)
     {
-        L3_C5_Graph[] graphs = new L3_C5_Graph[graphPaths.length];
-        for (int i =0; i< graphPaths.length ;i++) {
-            System.out.print("Initialisation graphe n° "  + (i+1) + " : " +  graphPaths[i]  +"\t\t...");
+        L3_C5_Graph[] graphs = new L3_C5_Graph[graphPaths.size()];
+        for (int i =0; i< graphPaths.size()  ;i++) {
+            System.out.print("Initialisation graphe n° "  + (i+1) + " : " +  graphPaths.get(i)  +"\t\t...");
             try {
-                if(!graphPaths[i].endsWith(".txt"))
-                    graphPaths[i] = graphPaths[i]+=".txt";
-                graphs[i] = new L3_C5_Graph(graphPaths[i]);
+
+                graphs[i] = new L3_C5_Graph(graphPaths.get(i));
             } 
             catch (Exception e) 
             {
@@ -75,10 +63,13 @@ public class L3_C5_main {
             System.out.print("OK"+ System.lineSeparator());
         }
         
-        for (L3_C5_Graph graph : graphs) 
+        for (int i = 0; i < graphs.length; i++) 
         {
-            for(int sommetID = 0; sommetID < graph.getVertexCount() ; sommetID++)
-            graph.testPathfinding(sommetID);
+            for(int sommetID = 0; sommetID < graphs[i].getVertexCount() ; sommetID++)
+            {
+                System.out.println("==== Graphe n°"+(i+1)+" sommet n°"+sommetID+" ====");
+                graphs[i].testPathfinding(sommetID);
+            }
         }
    
     }
@@ -126,10 +117,9 @@ public class L3_C5_main {
         return dg;
     }
 
-    private static boolean menu()
+
+    private static ArrayList<String> find_files(String PATH)
     {
-        Scanner sc = new Scanner(System.in);
-        String PATH = ".";
         File folder = new File(PATH);
         String[] files = folder.list();
         Pattern pat = Pattern.compile("L3_C5_[0-9]+\\.txt");
@@ -142,6 +132,15 @@ public class L3_C5_main {
                 files_graphs.add(files[i]);
         }
 
+        return files_graphs;
+
+    }
+
+    private static boolean menu()
+    {
+        Scanner sc = new Scanner(System.in);
+        String PATH = ".";
+        ArrayList<String> files_graphs = find_files(PATH);
         System.out.println("# Voici le liste des fichiers graphes trouvés: \n");
         for(int i = 0; i < files_graphs.size(); i++)
         {
@@ -152,7 +151,7 @@ public class L3_C5_main {
         System.out.println("# en respectant le format suivant dans le nom: L3_C5_#.txt");
         String str = "";
         int val = 0;
-        pat = Pattern.compile("^[0-9]{1,4}$");
+        Pattern pat = Pattern.compile("^[0-9]{1,4}$");
         do
         {
             System.out.println("# Entrez le numero du graphe que vous voulez charger:");
